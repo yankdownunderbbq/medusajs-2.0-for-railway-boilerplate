@@ -10,9 +10,9 @@ export default async function Nav() {
   const regions = await listRegions().then((regions: StoreRegion[]) => regions)
 
   return (
-    <div className="sticky top-0 inset-x-0 z-50 group">
-      <header className="relative h-16 mx-auto border-b duration-200 bg-white border-ui-border-base">
-        <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular">
+    <div className="relative top-0 inset-x-0 z-50 group">
+      <header className="relative h-16 mx-auto border-b duration-200 border-ui-border-base flex">
+        <nav className="content-container txt-xsmall-plus text-ui-fg-subtle flex items-center justify-between w-full h-full text-small-regular max-w-[1440px] mx-auto px-6">
           <div className="flex-1 basis-0 h-full flex items-center">
             <div className="h-full">
               <SideMenu regions={regions} />
@@ -20,13 +20,12 @@ export default async function Nav() {
           </div>
 
           <div className="flex items-center h-full">
-            <LocalizedClientLink
-              href="/"
-              className="txt-compact-xlarge-plus hover:text-ui-fg-base uppercase"
-              data-testid="nav-store-link"
-            >
-              Medusa Store
-            </LocalizedClientLink>
+            <img
+              loading="lazy"
+              srcSet="https://cdn.builder.io/api/v1/image/assets%2Ff90682fb5c0d4e97bbda253b3f43cb90%2F89cc7af302b341988a3d661ca3bced8c?width=100 100w, https://cdn.builder.io/api/v1/image/assets%2Ff90682fb5c0d4e97bbda253b3f43cb90%2F89cc7af302b341988a3d661ca3bced8c?width=200 200w, https://cdn.builder.io/api/v1/image/assets%2Ff90682fb5c0d4e97bbda253b3f43cb90%2F89cc7af302b341988a3d661ca3bced8c?width=400 400w, https://cdn.builder.io/api/v1/image/assets%2Ff90682fb5c0d4e97bbda253b3f43cb90%2F89cc7af302b341988a3d661ca3bced8c?width=800 800w, https://cdn.builder.io/api/v1/image/assets%2Ff90682fb5c0d4e97bbda253b3f43cb90%2F89cc7af302b341988a3d661ca3bced8c?width=1200 1200w, https://cdn.builder.io/api/v1/image/assets%2Ff90682fb5c0d4e97bbda253b3f43cb90%2F89cc7af302b341988a3d661ca3bced8c?width=1600 1600w, https://cdn.builder.io/api/v1/image/assets%2Ff90682fb5c0d4e97bbda253b3f43cb90%2F89cc7af302b341988a3d661ca3bced8c?width=2000 2000w, https://cdn.builder.io/api/v1/image/assets%2Ff90682fb5c0d4e97bbda253b3f43cb90%2F89cc7af302b341988a3d661ca3bced8c"
+              alt="Logo"
+              className="object-contain object-center w-full ml-5 min-h-[92px] min-w-[74px] max-w-[74px] aspect-[0.43] md:mx-auto"
+            />
           </div>
 
           <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
