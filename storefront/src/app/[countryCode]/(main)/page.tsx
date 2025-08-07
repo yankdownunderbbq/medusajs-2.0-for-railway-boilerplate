@@ -6,6 +6,7 @@ import Testimonials from "@modules/home/components/testimonials"
 import PreOrderExclusives from "@modules/home/components/pre-order-exclusives"
 import FeaturedSandwich from "@modules/home/components/featured-sandwich"
 import PopupLocation from "@modules/home/components/popup-location"
+import CateringQuote from "@modules/home/components/catering-quote"
 import { getCollectionsWithProducts } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 import { getProductsList } from "@lib/data/products"
@@ -42,6 +43,7 @@ export default async function Home({
       <PreOrderExclusives region={region} products={products} />
       <PopupLocation />
       <Testimonials />
+      <CateringQuote />
       <div className="py-12">
         <ul className="flex flex-col gap-x-6">
           <FeaturedProducts collections={collections} region={region} />
