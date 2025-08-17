@@ -18,14 +18,11 @@ const Hero = () => {
         <img
           src="https://cdn.builder.io/api/v1/image/assets%2Ff90682fb5c0d4e97bbda253b3f43cb90%2F547aeb3cd3bc4fc58703324192505b17"
           alt="BBQ Chef with food"
-          className="w-full h-full object-cover object-bottom"
+          className="w-full h-full object-cover object-top"
         />
         {/* Dark overlay for better text readability */}
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
       </div>
-
-
-
       {/* Hero Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 sm:px-8 lg:px-16 text-center">
         <div className="max-w-4xl mx-auto mb-8 sm:mb-16 md:mb-32 lg:mb-[199px] font-['Anek_Devanagari',sans-serif] pt-8 sm:pt-16 md:pt-24 lg:pt-[86px] mt-0 sm:mt-8 md:mt-16 lg:mt-[157px]">
