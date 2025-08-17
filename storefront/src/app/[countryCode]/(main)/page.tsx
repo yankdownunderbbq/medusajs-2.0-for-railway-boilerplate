@@ -7,6 +7,7 @@ import PreOrderExclusives from "@modules/home/components/pre-order-exclusives"
 import FeaturedSandwich from "@modules/home/components/featured-sandwich"
 import PopupLocation from "@modules/home/components/popup-location"
 import CateringQuote from "@modules/home/components/catering-quote"
+import PromotionalBanner from "@modules/home/components/promotional-banner"
 import { getCollectionsWithProducts } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 import { getProductsList } from "@lib/data/products"
@@ -38,6 +39,7 @@ export default async function Home({
 
   return (
     <>
+      <PromotionalBanner />
       <Hero />
       <FeaturedSandwich />
       <PreOrderExclusives region={region} products={products} />

@@ -97,9 +97,9 @@ export default async function PreOrderExclusives({
           {/* Order Online Button */}
           <div className="flex justify-center">
             <LocalizedClientLink href="/store">
-              <Button className="bg-[#636CBE] hover:bg-[#5A5AAE] text-white px-5 py-3 rounded-lg font-bold text-base leading-6 font-['Anek_Devanagari',sans-serif] uppercase min-w-[173px] h-12">
+              <button className="bg-[#636CBE] hover:bg-[#5A5AAE] text-white px-5 py-3 rounded-full font-bold text-base leading-6 font-['Anek_Devanagari',sans-serif] uppercase w-[250px] h-[50px] flex items-center justify-center border-0 outline-none transition-colors duration-200">
                 BUILD YOUR ORDER
-              </Button>
+              </button>
             </LocalizedClientLink>
           </div>
         </div>

@@ -134,7 +134,7 @@ const CateringQuote = () => {
                 We cater for birthdays, corporate events, and church gatherings with slow-smoked meats and crowd-pleasing sides.
               </p>
             </div>
-            <button className="bg-[#636CBE] text-white px-5 py-3 rounded-lg font-bold text-base uppercase font-sans w-fit transition-colors duration-200 hover:bg-[#5358a8]">
+            <button className="bg-[#636CBE] hover:bg-[#5A5AAE] text-white px-5 py-3 rounded-full font-bold text-base leading-6 font-['Anek_Devanagari',sans-serif] uppercase w-[250px] h-[50px] flex items-center justify-center border-0 outline-none transition-colors duration-200">
               DOWNLOAD MENU
             </button>
           </div>
@@ -323,7 +323,7 @@ const CateringQuote = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-[#636CBE] text-white px-5 py-3 rounded-lg font-bold text-base uppercase font-sans disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 hover:bg-[#5358a8] focus:outline-none focus:ring-2 focus:ring-[#636CBE] focus:ring-offset-2"
+                className="bg-[#636CBE] hover:bg-[#5A5AAE] text-white px-5 py-3 rounded-full font-bold text-base leading-6 font-['Anek_Devanagari',sans-serif] uppercase w-[250px] h-[50px] flex items-center justify-center border-0 outline-none transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? 'SUBMITTING...' : 'SUBMIT'}
               </button>
