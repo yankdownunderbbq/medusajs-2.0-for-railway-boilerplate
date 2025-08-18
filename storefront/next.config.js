@@ -18,7 +18,6 @@ const nextConfig = {
       {
         protocol: "http",
         hostname: "localhost",
-        
       },
       { // Note: needed to serve images from /public folder
         protocol: process.env.NEXT_PUBLIC_BASE_URL?.startsWith('https') ? 'https' : 'http',
@@ -28,17 +27,13 @@ const nextConfig = {
         protocol: "https",
         hostname: process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL?.replace('https://', ''),
       },
-      { // Note: can be removed after deleting demo products
+      { // Add your image bucket hostname here
         protocol: "https",
-        hostname: "medusa-public-images.s3.eu-west-1.amazonaws.com",
+        hostname: "bucket-production-fd15.up.railway.app",
       },
-      { // Note: can be removed after deleting demo products
+            { // Add your image bucket hostname here
         protocol: "https",
-        hostname: "medusa-server-testing.s3.amazonaws.com",
-      },
-      { // Note: can be removed after deleting demo products
-        protocol: "https",
-        hostname: "medusa-server-testing.s3.us-east-1.amazonaws.com",
+        hostname: "api.builder.io",
       },
       ...(process.env.NEXT_PUBLIC_MINIO_ENDPOINT ? [{ // Note: needed when using MinIO bucket storage for media
         protocol: "https",

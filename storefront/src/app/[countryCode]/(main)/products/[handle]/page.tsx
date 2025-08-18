@@ -1,7 +1,9 @@
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
-import ProductTemplate from "@modules/products/templates"
+// import ProductTemplate from "@modules/products/templates"
+import NewProductTemplate from "@modules/products/templates/new-product-template"
+import RelatedProducts from "@modules/products/components/related-products"
 import { getRegion, listRegions } from "@lib/data/regions"
 import { getProductByHandle, getProductsList } from "@lib/data/products"
 
@@ -80,10 +82,16 @@ export default async function ProductPage({ params }: Props) {
   }
 
   return (
-    <ProductTemplate
-      product={pricedProduct}
-      region={region}
-      countryCode={params.countryCode}
-    />
+    <>
+      <NewProductTemplate
+        product={pricedProduct}
+        region={region}
+        countryCode={params.countryCode}
+      />
+      <RelatedProducts 
+        product={pricedProduct} 
+        countryCode={params.countryCode} 
+      />
+    </>
   )
 }
