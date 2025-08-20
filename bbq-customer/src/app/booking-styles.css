@@ -1,0 +1,430 @@
+/* Booking Flow Styles */
+
+/* Booking section headers */
+.section-header.text-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.section-header .section-badge {
+  display: inline-block !important;
+  margin-bottom: 1rem;
+  width: auto !important;
+  max-width: fit-content !important;
+}
+
+.section-header .section-title {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.section-header .section-subtitle {
+  display: block;
+  width: 100%;
+}
+
+.booking-step {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(42, 42, 42, 0.08);
+  transition: all 0.3s;
+}
+
+.booking-step:hover {
+  box-shadow: 0 4px 16px rgba(42, 42, 42, 0.12);
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.step-number {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: linear-gradient(135deg, #b85c38, #d4a574);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.125rem;
+}
+
+.step-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  flex: 1;
+}
+
+.step-subtitle {
+  font-size: 0.875rem;
+  color: #6a6a6a;
+  margin-top: 0.25rem;
+}
+
+/* Ticket Selection */
+.ticket-selection-prominent {
+  background: #f9fafb;
+  border-radius: 0.75rem;
+  padding: 2rem;
+}
+
+.ticket-counter-large {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.counter-btn-large {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  border: 2px solid #b85c38;
+  background: white;
+  color: #b85c38;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.counter-btn-large:hover:not(:disabled) {
+  background: #b85c38;
+  color: white;
+  transform: scale(1.1);
+}
+
+.counter-btn-large:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.counter-display-large {
+  text-align: center;
+  min-width: 8rem;
+}
+
+.counter-number-large {
+  display: block;
+  font-family: 'Anek Devanagari', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: #b85c38;
+  line-height: 1;
+}
+
+.counter-label-large {
+  display: block;
+  font-size: 0.875rem;
+  color: #6a6a6a;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  margin-top: 0.25rem;
+}
+
+.ticket-info {
+  text-align: center;
+}
+
+.ticket-price {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 1rem;
+}
+
+.price-per {
+  color: #6a6a6a;
+}
+
+.price-total {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.ticket-includes {
+  font-size: 0.875rem;
+  color: #6a6a6a;
+  line-height: 1.5;
+}
+
+/* Package Shop */
+.package-shop {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .package-shop {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.shop-item {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.3s;
+}
+
+.shop-item:hover {
+  border-color: #b85c38;
+  box-shadow: 0 4px 16px rgba(184, 92, 56, 0.1);
+}
+
+.item-info {
+  margin-bottom: 1rem;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.item-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  flex: 1;
+}
+
+.item-price {
+  font-family: 'Anek Devanagari', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #b85c38;
+}
+
+.item-description {
+  color: #6a6a6a;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.item-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.feature-tag {
+  display: inline-block;
+  background: #f3f4f6;
+  color: #4b5563;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Quantity Controls */
+.item-controls {
+  display: flex;
+  justify-content: center;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: #f9fafb;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.qty-btn {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.25rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.qty-btn:hover:not(:disabled) {
+  border-color: #b85c38;
+  color: #b85c38;
+}
+
+.qty-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.qty-display {
+  min-width: 2rem;
+  text-align: center;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Cart Summary */
+.cart-summary {
+  background: linear-gradient(135deg, #fefefe, #f7f5f1);
+  border-radius: 1rem;
+  padding: 2rem;
+  border: 2px solid #b85c38;
+}
+
+.cart-items {
+  margin-bottom: 1.5rem;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item-name {
+  color: #4b5563;
+}
+
+.cart-item-price {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.cart-item.empty-state {
+  justify-content: center;
+  padding: 1.5rem 0;
+}
+
+.empty-message {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* Cart Total */
+.cart-total {
+  padding-top: 1rem;
+  border-top: 2px solid #e5e7eb;
+}
+
+.total-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+}
+
+.total-label {
+  color: #6b7280;
+}
+
+.total-amount {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.total-line.final {
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.total-line.final .total-label {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.total-line.final .total-amount {
+  font-family: 'Anek Devanagari', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #b85c38;
+}
+
+/* Checkout Button */
+.checkout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  width: 100%;
+  background: linear-gradient(135deg, #b85c38, #d4a574);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 1.5rem;
+  transition: all 0.3s;
+  box-shadow: 0 4px 16px rgba(184, 92, 56, 0.2);
+}
+
+.checkout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(184, 92, 56, 0.3);
+}
+
+.checkout-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.checkout-note i {
+  color: #22c55e;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .booking-step {
+    padding: 1.5rem;
+  }
+  
+  .step-title {
+    font-size: 1.25rem;
+  }
+  
+  .counter-btn-large {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  
+  .counter-number-large {
+    font-size: 2.5rem;
+  }
+  
+  .package-shop {
+    grid-template-columns: 1fr;
+  }
+  
+  .cart-summary {
+    padding: 1.5rem;
+  }
+}
