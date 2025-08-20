@@ -2,11 +2,7 @@
 
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
 import { useBBQEvent } from '@/lib/hooks/useBBQEvents'
-import { getEventStatus } from '@/lib/events'
-import BookingFlowV2 from '@/components/booking/BookingFlowV2'
-import '../../event-page.css'
 
 interface EventPageProps {
   params: {
@@ -15,52 +11,18 @@ interface EventPageProps {
 }
 
 export default function EventPage({ params }: EventPageProps) {
-  // Use the event ID directly from params
-  const { event, loading, error } = useBBQEvent(params.id)
-  const [products, setProducts] = useState<Array<{
-    id: string
-    title: string
-    description: string
-    thumbnail: string
-    variants: Array<{
-      id: string
-      title: string
-      prices?: Array<{
-        amount: number
-        currency_code: string
-      }>
-    }>
-  }>>([])
-
-  // Fetch products when event is loaded
-  useEffect(() => {
-    async function fetchProducts() {
-      if (!event || !event.content?.productIds?.length) {
-        setProducts([])
-        return
-      }
-
-      try {
-        const productResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/products?id=${event.content.productIds.join(',')}`,
-          {
-            headers: {
-              'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || ''
-            }
-          }
-        )
-        const productData = await productResponse.json()
-        setProducts(productData.products || [])
-      } catch (error) {
-        console.error('Error fetching products:', error)
-        setProducts([])
-      } finally {
-        // Products loaded
-      }
+  // Map static event IDs to API event IDs
+  const getApiEventId = (staticId: string) => {
+    const mapping: Record<string, string> = {
+      'event-001': 'bbq_event_1',
+      'event-002': 'bbq_event_2', 
+      'event-003': 'bbq_event_3'
     }
-
-    fetchProducts()
-  }, [event])
+    return mapping[staticId] || staticId
+  }
+  
+  const apiEventId = getApiEventId(params.id)
+  const { event, loading, error } = useBBQEvent(apiEventId)
   
   if (loading) {
     return (
@@ -108,14 +70,6 @@ export default function EventPage({ params }: EventPageProps) {
   const spotsLeft = (event.max_capacity || 0) - (event.current_bookings || 0)
   const isEventFull = spotsLeft <= 0 || event.status === 'sold-out'
   const isUpcoming = eventDate > new Date()
-  
-  // Create a compatible event status object
-  const eventStatusData = {
-    status: event.status || 'active',
-    spotsLeft: spotsLeft,
-    totalSpots: event.max_capacity || 0
-  }
-  const eventStatus = getEventStatus(eventStatusData as any)
   
   const formatEventDate = (dateString: string) => {
     const date = new Date(dateString)
@@ -281,7 +235,7 @@ export default function EventPage({ params }: EventPageProps) {
                 <i className="fas fa-door-open"></i>
               </div>
               <div className="timeline-content">
-                <div className="timeline-time">{formatEventTime(event.event_date)}</div>
+                <div className="timeline-time">{event.time}</div>
                 <h4 className="timeline-event">Welcome & Introduction</h4>
                 <p className="timeline-description">
                   Arrival, check-in, and introduction to {event.bbq_region} BBQ history and traditions.
@@ -335,7 +289,7 @@ export default function EventPage({ params }: EventPageProps) {
       <section className="whats-included">
         <div className="included-container">
           <div className="section-header">
-            <span className="section-badge">Your ${formatPrice(event.base_price)} Gets You</span>
+            <span className="section-badge">Your ${event.price} Gets You</span>
             <h2 className="section-title">What's Included In Your {event.bbq_region} Experience</h2>
             <p className="section-subtitle">
               More than just a tasting - it's your gateway to authentic {event.bbq_region} BBQ culture
@@ -359,7 +313,7 @@ export default function EventPage({ params }: EventPageProps) {
               </ul>
               <div className="card-value">
                 <span className="value-label">Standalone Value:</span>
-                <span className="value-amount">${formatPrice(event.base_price) + 10}</span>
+                <span className="value-amount">${event.price + 10}</span>
               </div>
             </div>
 
@@ -419,7 +373,7 @@ export default function EventPage({ params }: EventPageProps) {
               <div className="summary-math">
                 <div className="math-line">
                   <span className="math-item">{event.bbq_region} BBQ Tasting</span>
-                  <span className="math-value">${parseInt(formatPrice(event.base_price)) + 10}</span>
+                  <span className="math-value">${event.price + 10}</span>
                 </div>
                 <div className="math-line">
                   <span className="math-item">Store Benefits</span>
@@ -432,7 +386,7 @@ export default function EventPage({ params }: EventPageProps) {
                 <div className="math-divider"></div>
                 <div className="math-line total">
                   <span className="math-item">Your Price</span>
-                  <span className="math-value">${formatPrice(event.base_price)}</span>
+                  <span className="math-value">${event.price}</span>
                 </div>
               </div>
             </div>
@@ -442,7 +396,7 @@ export default function EventPage({ params }: EventPageProps) {
           <div className="social-proof-mini">
             <div className="proof-stats">
               <div className="proof-stat">
-                <span className="proof-number">{47 + (event.max_capacity || 0) - spotsLeft}</span>
+                <span className="proof-number">{47 + event.totalSpots - event.spotsLeft}</span>
                 <span className="proof-label">Previous Attendees</span>
               </div>
               <div className="proof-stat">
@@ -463,8 +417,36 @@ export default function EventPage({ params }: EventPageProps) {
         </div>
       </section>
 
-      <BookingFlowV2 event={event} products={products} />
+      {/* Booking Section */}
+      {!isEventFull && (
+        <section id="booking" className="section-padding bg-bg-secondary">
+          <div className="container">
+            <div className="section-header text-center">
+              <h2 className="section-title">Reserve Your Spot</h2>
+              <p className="section-subtitle">
+                Choose your tickets and add-on packages for the ultimate {event.bbq_region} BBQ experience
+              </p>
+            </div>
 
+            <div className="booking-cta-container">
+              <Link href={`/book/${event.id}`} className="booking-cta-large">
+                <div className="booking-cta-content">
+                  <h3>Ready to Experience {event.bbq_region} BBQ?</h3>
+                  <p>Book your spot now and secure your place at this exclusive event</p>
+                  <span className="booking-cta-button">
+                    <i className="fas fa-calendar-check"></i>
+                    Complete Your Booking
+                  </span>
+                </div>
+                <div className="booking-cta-price">
+                  <span className="price-from">From</span>
+                  <span className="price-amount">${event.price}</span>
+                </div>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Logistics Section */}
       <section className="section-padding bg-bg-primary">
@@ -614,7 +596,7 @@ export default function EventPage({ params }: EventPageProps) {
 
           <div className="faq-grid">
             <div className="faq-item">
-              <h3 className="faq-question">What's included in the ${formatPrice(event.base_price)} entry fee?</h3>
+              <h3 className="faq-question">What's included in the ${event.price} entry fee?</h3>
               <p className="faq-answer">
                 Your ticket includes a generous portion of authentic {event.bbq_region} BBQ, traditional sides, 
                 regional sauces, BBQ education session, 15% store discount, and exclusive access to pre-order packages.
@@ -657,7 +639,7 @@ export default function EventPage({ params }: EventPageProps) {
               <h3 className="faq-question">Can I bring children to the event?</h3>
               <p className="faq-answer">
                 Children are welcome! Kids under 12 get 50% off entry. We recommend the event for ages 8+ as it's 
-                educational and runs for {event.duration_hours} hours. Children must be supervised at all times.
+                educational and runs for {event.duration}. Children must be supervised at all times.
               </p>
             </div>
 
@@ -749,7 +731,6 @@ export default function EventPage({ params }: EventPageProps) {
           </div>
         </div>
       </section>
-
     </div>
   )
 }

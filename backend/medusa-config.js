@@ -51,6 +51,10 @@ const medusaConfig = {
   },
   modules: [
     {
+      resolve: "./src/modules/event",
+      key: "event"
+    },
+    {
       key: Modules.FILE,
       resolve: '@medusajs/file',
       options: {

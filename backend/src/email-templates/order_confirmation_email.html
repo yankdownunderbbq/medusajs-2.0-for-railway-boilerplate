@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Kansas City BBQ Experience is Confirmed!</title>
+    <style>
+        /* Email-safe CSS */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background-color: #f7f5f1;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fefefe;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(42, 42, 42, 0.12);
+        }
+        
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+            color: #fefefe;
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(184, 92, 56, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .confirmation-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 32px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo .accent {
+            color: #b85c38;
+        }
+        
+        .header-title {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .header-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .order-number {
+            background-color: #b85c38;
+            color: #fefefe;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Content Sections */
+        .content {
+            padding: 24px;
+        }
+        
+        .section {
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #b85c38;
+        }
+        
+        /* Event Details Card */
+        .event-card {
+            background: linear-gradient(135deg, #f7f5f1 0%, #f2efe9 100%);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border-left: 4px solid #b85c38;
+        }
+        
+        .event-badge {
+            background-color: #b85c38;
+            color: #fefefe;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        
+        .event-title {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+        
+        .event-details {
+            display: table;
+            width: 100%;
+        }
+        
+        .detail-row {
+            display: table-row;
+        }
+        
+        .detail-icon {
+            display: table-cell;
+            width: 40px;
+            padding: 8px 12px 8px 0;
+            vertical-align: top;
+        }
+        
+        .detail-icon-bg {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #b85c38 0%, #d4a574 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fefefe;
+            font-size: 14px;
+        }
+        
+        .detail-content {
+            display: table-cell;
+            padding: 8px 0;
+            vertical-align: top;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            color: #6a6a6a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .detail-value {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+        }
+        
+        .detail-sub {
+            font-size: 14px;
+            color: #2a2a2a;
+        }
+        
+        /* Order Summary */
+        .order-summary {
+            background-color: #fefefe;
+            border: 2px solid #f7f5f1;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f7f5f1;
+        }
+        
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        
+        .item-info {
+            flex: 1;
+        }
+        
+        .item-name {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+        
+        .item-description {
+            font-size: 14px;
+            color: #6a6a6a;
+        }
+        
+        .item-price {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #b85c38;
+            margin-left: 16px;
+        }
+        
+        .order-total {
+            background: linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(212, 164, 116, 0.1) 100%);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .total-label {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        
+        .total-amount {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #b85c38;
+        }
+        
+        /* Pre-order Info */
+        .preorder-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+            border-radius: 12px;
+            padding: 20px;
+            color: #fefefe;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .preorder-card::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(184, 92, 56, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .preorder-title {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .preorder-status {
+            background-color: #b85c38;
+            color: #fefefe;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .preorder-instructions {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* What to Bring */
+        .bring-list {
+            background-color: #f7f5f1;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .bring-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 8px;
+            background-color: #fefefe;
+            border-radius: 8px;
+            border-left: 3px solid #b85c38;
+        }
+        
+        .bring-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .bring-icon {
+            width: 24px;
+            height: 24px;
+            background-color: #b85c38;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fefefe;
+            font-size: 12px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .bring-text {
+            flex: 1;
+        }
+        
+        .bring-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+        }
+        
+        .bring-subtitle {
+            font-size: 12px;
+            color: #6a6a6a;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: table;
+            width: 100%;
+            margin: 24px 0;
+        }
+        
+        .action-btn {
+            display: table-cell;
+            width: 48%;
+            padding: 0 1%;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 8px;
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-align: center;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #b85c38 0%, #d4654a 100%);
+            color: #fefefe;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: #b85c38;
+            border: 2px solid #b85c38;
+        }
+        
+        /* Support Section */
+        .support-section {
+            background: linear-gradient(135deg, rgba(184, 92, 56, 0.05) 0%, rgba(212, 164, 116, 0.05) 100%);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .support-title {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .support-description {
+            font-size: 14px;
+            color: #6a6a6a;
+            margin-bottom: 16px;
+        }
+        
+        .support-contacts {
+            display: table;
+            width: 100%;
+        }
+        
+        .support-contact {
+            display: table-cell;
+            width: 50%;
+            text-align: center;
+        }
+        
+        .contact-link {
+            display: inline-block;
+            padding: 12px 16px;
+            background-color: #b85c38;
+            color: #fefefe;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #2a2a2a;
+            color: #fefefe;
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .footer-logo {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        
+        .footer-logo .accent {
+            color: #b85c38;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            opacity: 0.8;
+            margin-bottom: 16px;
+        }
+        
+        .social-links {
+            margin-bottom: 16px;
+        }
+        
+        .social-link {
+            display: inline-block;
+            margin: 0 8px;
+            color: #b85c38;
+            font-size: 18px;
+            text-decoration: none;
+        }
+        
+        .unsubscribe {
+            font-size: 12px;
+            opacity: 0.6;
+        }
+        
+        .unsubscribe a {
+            color: #b85c38;
+            text-decoration: none;
+        }
+        
+        /* Mobile Responsive */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header {
+                padding: 24px 16px;
+            }
+            
+            .content {
+                padding: 16px;
+            }
+            
+            .action-buttons {
+                display: block;
+            }
+            
+            .action-btn {
+                display: block;
+                width: 100%;
+                margin-bottom: 12px;
+                padding: 0;
+            }
+            
+            .support-contacts {
+                display: block;
+            }
+            
+            .support-contact {
+                display: block;
+                width: 100%;
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="confirmation-icon">✓</div>
+            <div class="logo">Yank <span class="accent">DownUnder</span></div>
+            <h1 class="header-title">Order Confirmed!</h1>
+            <p class="header-subtitle">Your Kansas City BBQ experience is reserved</p>
+            <div class="order-number">Order #KC-2024-1214-001</div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Event Details -->
+            <div class="section">
+                <h2 class="section-title">Your Event Details</h2>
+                
+                <div class="event-card">
+                    <div class="event-badge">BBQ Experience</div>
+                    <h3 class="event-title">Kansas City Burnt Ends Experience</h3>
+                    
+                    <div class="event-details">
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <div class="detail-icon-bg">📅</div>
+                            </div>
+                            <div class="detail-content">
+                                <div class="detail-label">Date & Time</div>
+                                <div class="detail-value">Saturday, December 14, 2024</div>
+                                <div class="detail-sub">11:00 AM - 3:00 PM (arrival between 11:00-11:30 AM)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <div class="detail-icon-bg">📍</div>
+                            </div>
+                            <div class="detail-content">
+                                <div class="detail-label">Location</div>
+                                <div class="detail-value">Turn Left @ Albuquerque</div>
+                                <div class="detail-sub">123 Queen Street, Brisbane CBD, QLD 4000</div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <div class="detail-icon">
+                                <div class="detail-icon-bg">🍖</div>
+                            </div>
+                            <div class="detail-content">
+                                <div class="detail-label">Experience</div>
+                                <div class="detail-value">Kansas City Burnt Ends Tasting</div>
+                                <div class="detail-sub">BBQ education + store benefits + pre-order access</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="section">
+                <h2 class="section-title">Order Summary</h2>
+                
+                <div class="order-summary">
+                    <div class="order-item">
+                        <div class="item-info">
+                            <div class="item-name">Kansas City BBQ Experience</div>
+                            <div class="item-description">Event entry + burnt ends tasting + store benefits</div>
+                        </div>
+                        <div class="item-price">$25.00</div>
+                    </div>
+                    
+                    <div class="order-item">
+                        <div class="item-info">
+                            <div class="item-name">Burnt Ends Master Package</div>
+                            <div class="item-description">2lbs burnt ends + molasses sauce + KC rub + extras</div>
+                        </div>
+                        <div class="item-price">$35.00</div>
+                    </div>
+                    
+                    <div class="order-item">
+                        <div class="item-info">
+                            <div class="item-name">Extra Molasses Sauce (2x)</div>
+                            <div class="item-description">Additional 4oz bottles of house-made sauce</div>
+                        </div>
+                        <div class="item-price">$16.00</div>
+                    </div>
+                    
+                    <div class="order-total">
+                        <div class="total-label">Total Paid</div>
+                        <div class="total-amount">$82.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pre-Order Pickup -->
+            <div class="section">
+                <h2 class="section-title">Pre-Order Pickup</h2>
+                
+                <div class="preorder-card">
+                    <div class="preorder-status">Ready for Pickup</div>
+                    <h3 class="preorder-title">Your BBQ packages will be ready at the event</h3>
+                    <div class="preorder-instructions">
+                        Collect your pre-orders between <strong>1:00 PM - 3:00 PM</strong> at the event. 
+                        Look for the "Pre-Order Pickup" station inside Turn Left @ Albuquerque. 
+                        All packages are vacuum-sealed and ready to freeze.
+                    </div>
+                </div>
+            </div>
+
+            <!-- What to Bring -->
+            <div class="section">
+                <h2 class="section-title">What to Bring</h2>
+                
+                <div class="bring-list">
+                    <div class="bring-item">
+                        <div class="bring-icon">🎫</div>
+                        <div class="bring-text">
+                            <div class="bring-title">This confirmation email</div>
+                            <div class="bring-subtitle">Required for check-in</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bring-item">
+                        <div class="bring-icon">🆔</div>
+                        <div class="bring-text">
+                            <div class="bring-title">Valid ID</div>
+                            <div class="bring-subtitle">For age verification</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bring-item">
+                        <div class="bring-icon">💳</div>
+                        <div class="bring-text">
+                            <div class="bring-title">Payment method</div>
+                            <div class="bring-subtitle">For store purchases (15% discount applies)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="bring-item">
+                        <div class="bring-icon">🍽️</div>
+                        <div class="bring-text">
+                            <div class="bring-title">Your appetite</div>
+                            <div class="bring-subtitle">For authentic Kansas City BBQ and great stories!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <div class="action-btn">
+                    <a href="#" class="btn btn-primary">Add to Calendar</a>
+                </div>
+                <div class="action-btn">
+                    <a href="#" class="btn btn-secondary">Get Directions</a>
+                </div>
+            </div>
+
+            <!-- Support -->
+            <div class="support-section">
+                <h3 class="support-title">Questions About Your Order?</h3>
+                <p class="support-description">
+                    Our team is here to help with any questions about your BBQ experience.
+                </p>
+                <div class="support-contacts">
+                    <div class="support-contact">
+                        <a href="mailto:info@yankdownunder.com" class="contact-link">📧 Email Us</a>
+                    </div>
+                    <div class="support-contact">
+                        <a href="tel:+61412345678" class="contact-link">📞 Call Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-logo">Yank <span class="accent">DownUnder</span> BBQ</div>
+            <p class="footer-text">
+                Authentic regional American BBQ experiences in Australia
+            </p>
+            <div class="social-links">
+                <a href="#" class="social-link">📘</a>
+                <a href="#" class="social-link">📷</a>
+                <a href="#" class="social-link">✉️</a>
+            </div>
+            <div class="unsubscribe">
+                <a href="#">Unsubscribe</a> | <a href="#">Update Preferences</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

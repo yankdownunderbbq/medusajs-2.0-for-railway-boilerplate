@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today's Pickup Instructions - Kansas City BBQ</title>
+    <style>
+        /* Email-safe CSS optimized for mobile viewing */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background-color: #f7f5f1;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fefefe;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(42, 42, 42, 0.12);
+        }
+        
+        /* Header - Compact for mobile reference */
+        .header {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: #fefefe;
+            padding: 20px 24px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .live-badge {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            padding: 6px 16px;
+            display: inline-block;
+            margin-bottom: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .header-title {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        
+        .header-subtitle {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        
+        .order-reference {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 12px;
+        }
+        
+        /* Content */
+        .content {
+            padding: 20px 16px;
+        }
+        
+        .section {
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #b85c38;
+        }
+        
+        /* Quick Status */
+        .status-bar {
+            background: linear-gradient(135deg, #f7f5f1 0%, #f2efe9 100%);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            border-left: 4px solid #27ae60;
+        }
+        
+        .status-items {
+            display: table;
+            width: 100%;
+        }
+        
+        .status-item {
+            display: table-cell;
+            width: 50%;
+            text-align: center;
+            padding: 8px;
+        }
+        
+        .status-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 6px;
+            font-size: 14px;
+            color: #fefefe;
+        }
+        
+        .status-label {
+            font-size: 12px;
+            color: #6a6a6a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        
+        .status-value {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #27ae60;
+        }
+        
+        /* Pickup Instructions - Mobile Optimized */
+        .pickup-card {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+            border-radius: 12px;
+            padding: 20px;
+            color: #fefefe;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .pickup-card::before {
+            content: '';
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, rgba(184, 92, 56, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        
+        .pickup-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .pickup-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #b85c38 0%, #d4a574 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .pickup-title {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .pickup-steps {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .pickup-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: rgba(254, 254, 254, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #b85c38;
+        }
+        
+        .pickup-step:last-child {
+            margin-bottom: 0;
+        }
+        
+        .step-number {
+            width: 24px;
+            height: 24px;
+            background-color: #b85c38;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .step-content {
+            flex: 1;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #fefefe;
+        }
+        
+        .step-description {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        /* Your Items */
+        .items-list {
+            background-color: #fefefe;
+            border: 2px solid #f7f5f1;
+            border-radius: 12px;
+            padding: 16px;
+        }
+        
+        .item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            margin-bottom: 8px;
+            background: rgba(184, 92, 56, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #b85c38;
+        }
+        
+        .item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .item-info {
+            flex: 1;
+        }
+        
+        .item-name {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+        }
+        
+        .item-details {
+            font-size: 12px;
+            color: #6a6a6a;
+        }
+        
+        .item-status {
+            background-color: #27ae60;
+            color: #fefefe;
+            padding: 4px 8px;
+            border-radius: 50px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Location Finder - Visual */
+        .location-visual {
+            background: linear-gradient(135deg, #f7f5f1 0%, #f2efe9 100%);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #b85c38;
+        }
+        
+        .location-title {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1a1a1a;
+        }
+        
+        .venue-map {
+            background-color: #fefefe;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(184, 92, 56, 0.2);
+        }
+        
+        .map-items {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .map-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            min-width: 80px;
+        }
+        
+        .map-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #b85c38 0%, #d4a574 100%);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fefefe;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+        
+        .map-label {
+            font-size: 10px;
+            color: #6a6a6a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        
+        .directions-text {
+            font-size: 14px;
+            color: #6a6a6a;
+            line-height: 1.5;
+        }
+        
+        .highlight {
+            color: #b85c38;
+            font-weight: 600;
+        }
+        
+        /* Time Reminder */
+        .time-reminder {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: #fefefe;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: gentle-pulse 3s infinite;
+        }
+        
+        @keyframes gentle-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .time-reminder-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .time-reminder-text {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .time-reminder-sub {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: table;
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .quick-action {
+            display: table-cell;
+            width: 50%;
+            padding: 0 6px;
+        }
+        
+        .action-btn {
+            display: block;
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 8px;
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-align: center;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #b85c38 0%, #d4654a 100%);
+            color: #fefefe;
+        }
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: #b85c38;
+            border: 2px solid #b85c38;
+        }
+        
+        /* Contact - Emergency Style */
+        .emergency-contact {
+            background: linear-gradient(135deg, rgba(184, 92, 56, 0.1) 0%, rgba(212, 164, 116, 0.1) 100%);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            border: 2px solid #b85c38;
+        }
+        
+        .emergency-title {
+            font-family: 'Anek Devanagari', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+        
+        .emergency-subtitle {
+            font-size: 12px;
+            color: #6a6a6a;
+            margin-bottom: 12px;
+        }
+        
+        .contact-buttons {
+            display: table;
+            width: 100%;
+        }
+        
+        .contact-btn {
+            display: table-cell;
+            width: 50%;
+            padding: 0 4px;
+        }
+        
+        .contact-link {
+            display: block;
+            padding: 12px 8px;
+            background-color: #b85c38;
+            color: #fefefe;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            text-align: center;
+        }
+        
+        /* Footer - Minimal */
+        .footer {
+            background-color: #2a2a2a;
+            color: #fefefe;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .footer-text {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        /* Mobile Responsive */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .content {
+                padding: 16px 12px;
+            }
+            
+            .status-items,
+            .quick-actions,
+            .contact-buttons {
+                display: block;
+            }
+            
+            .status-item,
+            .quick-action,
+            .contact-btn {
+                display: block;
+                width: 100%;
+                margin-bottom: 12px;
+                padding: 0;
+            }
+            
+            .map-items {
+                justify-content: center;
+            }
+            
+            .map-item {
+                min-width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="live-badge">🔴 Live Event Today</div>
+            <h1 class="header-title">Pickup Ready!</h1>
+            <p class="header-subtitle">Your BBQ packages are waiting for you</p>
+            <div class="order-reference">Order #KC-2024-1214-001</div>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Quick Status -->
+            <div class="status-bar">
+                <div class="status-items">
+                    <div class="status-item">
+                        <div class="status-icon">📦</div>
+                        <div class="status-label">Your Items</div>
+                        <div class="status-value">Ready</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-icon">⏰</div>
+                        <div class="status-label">Pickup Window</div>
+                        <div class="status-value">1PM - 3PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Time Reminder -->
+            <div class="time-reminder">
+                <div class="time-reminder-icon">⚡</div>
+                <div class="time-reminder-text">Pickup Window Open Now!</div>
+                <div class="time-reminder-sub">1:00 PM - 3:00 PM today • Don't miss it</div>
+            </div>
+
+            <!-- Pickup Instructions -->
+            <div class="section">
+                <h2 class="section-title">How to Collect Your BBQ</h2>
+                
+                <div class="pickup-card">
+                    <div class="pickup-header">
+                        <div class="pickup-icon">📍</div>
+                        <div class="pickup-title">3-Step Pickup Process</div>
+                    </div>
+                    
+                    <div class="pickup-steps">
+                        <div class="pickup-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <div class="step-title">Find the Pre-Order Station</div>
+                                <div class="step-description">
+                                    Look for the orange "BBQ Pre-Orders" banner inside Turn Left @ Albuquerque. 
+                                    It's near the back of the store, next to the smoker display.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pickup-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <div class="step-title">Show This Email</div>
+                                <div class="step-description">
+                                    Present this email (or your order number KC-2024-1214-001) to our team member. 
+                                    We'll verify your items and have them ready in under 2 minutes.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pickup-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <div class="step-title">Take Your BBQ Home</div>
+                                <div class="step-description">
+                                    All items are vacuum-sealed and ready to freeze. We provide ice packs for the journey home. 
+                                    Reheating instructions included with every package.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your Items -->
+            <div class="section">
+                <h2 class="section-title">Your BBQ Packages Today</h2>
+                
+                <div class="items-list">
+                    <div class="item">
+                        <div class="item-info">
+                            <div class="item-name">Burnt Ends Master Package</div>
+                            <div class="item-details">2lbs burnt ends + molasses sauce + KC rub + extras</div>
+                        </div>
+                        <div class="item-status">Ready</div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-info">
+                            <div class="item-name">Extra Molasses Sauce (2x)</div>
+                            <div class="item-details">Two 4oz bottles of house-made sauce</div>
+                        </div>
+                        <div class="item-status">Ready</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Location Visual -->
+            <div class="section">
+                <h2 class="section-title">Finding the Pickup Station</h2>
+                
+                <div class="location-visual">
+                    <div class="location-title">Inside Turn Left @ Albuquerque</div>
+                    
+                    <div class="venue-map">
+                        <div class="map-items">
+                            <div class="map-item">
+                                <div class="map-icon">🚪</div>
+                                <div class="map-label">Entrance</div>
+                            </div>
+                            <div class="map-item">
+                                <div class="map-icon">🛍️</div>
+                                <div class="map-label">Store</div>
+                            </div>
+                            <div class="map-item">
+                                <div class="map-icon">🔥</div>
+                                <div class="map-label">Smokers</div>
+                            </div>
+                            <div class="map-item">
+                                <div class="map-icon">📦</div>
+                                <div class="map-label">Pickup</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="directions-text">
+                        Enter the main door → Walk straight back past the BBQ equipment → 
+                        Look for the <span class="highlight">orange "BBQ Pre-Orders" banner</span> → 
+                        Our team member will be waiting for you!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <div class="quick-action">
+                    <a href="#" class="action-btn btn-primary">Call for Help</a>
+                </div>
+                <div class="quick-action">
+                    <a href="#" class="action-btn btn-secondary">Get Directions</a>
+                </div>
+            </div>
+
+            <!-- Emergency Contact -->
+            <div class="emergency-contact">
+                <h3 class="emergency-title">Can't Find Us?</h3>
+                <p class="emergency-subtitle">
+                    If you're at the venue and can't locate the pickup station, get in touch immediately.
+                </p>
+                <div class="contact-buttons">
+                    <div class="contact-btn">
+                        <a href="tel:+61412345678" class="contact-link">📞 Call Now</a>
+                    </div>
+                    <div class="contact-btn">
+                        <a href="sms:+61412345678" class="contact-link">💬 Text Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p class="footer-text">
+                Yank DownUnder BBQ • Thanks for choosing authentic regional BBQ! 🍖
+            </p>
+        </div>
+    </div>
+</body>
+</html>

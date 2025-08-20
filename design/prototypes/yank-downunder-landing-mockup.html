@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yank DownUnder BBQ - Authentic American BBQ in Australia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /*
+        ==========================================
+        YANK DOWNUNDER BBQ - DESIGN SYSTEM
+        ==========================================
+        */
+
+        /* Import fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            /* Brand Colors */
+            --charcoal: #2a2a2a;
+            --warm-copper: #b85c38;
+            --soft-copper: #d4a574;
+            --cream: #f7f5f1;
+            --off-black: #1a1a1a;
+            --warm-white: #fefefe;
+            
+            /* Semantic Colors */
+            --text-primary: var(--off-black);
+            --text-secondary: var(--charcoal);
+            --text-muted: #6a6a6a;
+            --text-inverse: var(--warm-white);
+            
+            --bg-primary: var(--warm-white);
+            --bg-secondary: var(--cream);
+            --bg-dark: var(--charcoal);
+            
+            --accent-primary: var(--warm-copper);
+            --accent-secondary: var(--soft-copper);
+            --accent-hover: #a04d2f;
+            
+            /* Typography */
+            --font-display: 'Anek Devanagari', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            
+            /* Spacing */
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            --space-24: 6rem;
+            
+            /* Transitions */
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Shadows */
+            --shadow-subtle: 0 2px 8px rgba(42, 42, 42, 0.08);
+            --shadow-medium: 0 4px 16px rgba(42, 42, 42, 0.12);
+            --shadow-strong: 0 8px 32px rgba(42, 42, 42, 0.16);
+            --shadow-copper: 0 4px 16px rgba(184, 92, 56, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        *::selection {
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.5;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: var(--space-6) var(--space-4);
+            background-color: rgba(254, 254, 254, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(42, 42, 42, 0.1);
+            transition: all var(--transition-medium);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .nav-logo .accent {
+            color: var(--warm-copper);
+        }
+
+        .nav-links {
+            display: none;
+            gap: var(--space-8);
+            list-style: none;
+        }
+
+        .nav-link {
+            font-family: var(--font-display);
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            transition: color var(--transition-fast);
+        }
+
+        .nav-link:hover {
+            color: var(--warm-copper);
+        }
+
+        .nav-cta {
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+            padding: var(--space-3) var(--space-6);
+            border: none;
+            border-radius: 50px;
+            font-family: var(--font-display);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            white-space: nowrap;
+            min-width: 120px;
+        }
+
+        .nav-cta:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 100px;
+            padding-bottom: var(--space-20);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--cream) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -200px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(184, 92, 56, 0.05) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-12);
+            align-items: center;
+        }
+
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+            padding: var(--space-2) var(--space-4);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-6);
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--text-primary);
+            margin-bottom: var(--space-6);
+        }
+
+        .hero-title .accent {
+            color: var(--warm-copper);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-8);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+            padding: var(--space-5) var(--space-8);
+            border: none;
+            border-radius: var(--space-3);
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            box-shadow: var(--shadow-copper);
+        }
+
+        .hero-cta:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(184, 92, 56, 0.25);
+        }
+
+        /* Next Event Section */
+        .next-event {
+            padding: var(--space-20) var(--space-4);
+            background-color: var(--bg-dark);
+            color: var(--text-inverse);
+            position: relative;
+        }
+
+        .next-event::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" patternUnits="userSpaceOnUse" width="100" height="100"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.02"/><circle cx="75" cy="75" r="1" fill="%23ffffff" opacity="0.02"/><circle cx="50" cy="10" r="0.5" fill="%23ffffff" opacity="0.03"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        }
+
+        .next-event-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-16);
+        }
+
+        .section-badge {
+            display: inline-block;
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+            padding: var(--space-2) var(--space-4);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-4);
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: var(--space-4);
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: rgba(254, 254, 254, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .event-card {
+            background: linear-gradient(135deg, var(--cream) 0%, var(--warm-white) 100%);
+            border-radius: var(--space-6);
+            padding: var(--space-8);
+            color: var(--text-primary);
+            position: relative;
+            overflow: hidden;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(184, 92, 56, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+        }
+
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-6);
+            position: relative;
+            z-index: 2;
+        }
+
+        .event-date {
+            font-family: var(--font-display);
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--warm-copper);
+            line-height: 1;
+        }
+
+        .event-time {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: var(--space-2);
+        }
+
+        .event-status {
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+            padding: var(--space-2) var(--space-4);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(184, 92, 56, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(184, 92, 56, 0); }
+        }
+
+        .event-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: var(--space-4);
+            position: relative;
+            z-index: 2;
+        }
+
+        .event-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-8);
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        .event-cta {
+            width: 100%;
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+            padding: var(--space-5) var(--space-6);
+            border: none;
+            border-radius: var(--space-3);
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            position: relative;
+            z-index: 2;
+        }
+
+        .event-cta:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        /* Featured BBQ Section */
+        .featured-bbq {
+            padding: var(--space-24) var(--space-4);
+            background-color: var(--bg-secondary);
+        }
+
+        .featured-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .bbq-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-8);
+            margin-top: var(--space-12);
+        }
+
+        .bbq-card {
+            background-color: var(--bg-primary);
+            border-radius: var(--space-6);
+            overflow: hidden;
+            box-shadow: var(--shadow-subtle);
+            transition: all var(--transition-medium);
+        }
+
+        .bbq-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .bbq-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(135deg, var(--soft-copper) 0%, var(--warm-copper) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bbq-image::before {
+            content: 'BBQ';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--warm-white);
+            opacity: 0.8;
+        }
+
+        .bbq-badge {
+            position: absolute;
+            top: var(--space-4);
+            right: var(--space-4);
+            background-color: var(--text-primary);
+            color: var(--warm-white);
+            padding: var(--space-2) var(--space-3);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .bbq-content {
+            padding: var(--space-6);
+        }
+
+        .bbq-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: var(--space-3);
+        }
+
+        .bbq-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-6);
+            line-height: 1.6;
+        }
+
+        .bbq-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bbq-price {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--warm-copper);
+        }
+
+        .bbq-cta {
+            background-color: var(--charcoal);
+            color: var(--warm-white);
+            padding: var(--space-3) var(--space-6);
+            border: none;
+            border-radius: var(--space-2);
+            font-family: var(--font-display);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+        }
+
+        .bbq-cta:hover {
+            background-color: var(--warm-copper);
+            transform: translateY(-2px);
+        }
+
+        /* Story Section */
+        .story {
+            padding: var(--space-24) var(--space-4);
+            background-color: var(--bg-primary);
+        }
+
+        .story-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-12);
+            align-items: center;
+        }
+
+        .story-content h2 {
+            font-family: var(--font-display);
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: var(--space-6);
+        }
+
+        .story-content p {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-6);
+        }
+
+        .story-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--warm-copper);
+            font-family: var(--font-display);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            text-decoration: none;
+            transition: all var(--transition-medium);
+        }
+
+        .story-cta:hover {
+            gap: var(--space-4);
+        }
+
+        .story-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, var(--charcoal) 0%, var(--warm-copper) 100%);
+            border-radius: var(--space-6);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-image::before {
+            content: 'American BBQ Regions';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--warm-white);
+            text-align: center;
+            opacity: 0.9;
+        }
+
+        /* Social Proof */
+        .social-proof {
+            padding: var(--space-20) var(--space-4);
+            background-color: var(--cream);
+            text-align: center;
+        }
+
+        .social-proof-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .testimonial {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 500;
+            line-height: 1.4;
+            color: var(--text-primary);
+            margin-bottom: var(--space-6);
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            color: var(--warm-copper);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            padding: var(--space-16) var(--space-4);
+            background-color: var(--charcoal);
+            color: var(--text-inverse);
+            text-align: center;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: var(--space-8);
+        }
+
+        .footer-social {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+
+        .footer-social a {
+            color: var(--text-inverse);
+            font-size: 1.5rem;
+            transition: color var(--transition-fast);
+        }
+
+        .footer-social a:hover {
+            color: var(--warm-copper);
+        }
+
+        .footer-text {
+            color: rgba(254, 254, 254, 0.7);
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .nav-links {
+                display: flex;
+            }
+
+            .hero-title {
+                font-size: 4.5rem;
+            }
+
+            .hero-container {
+                grid-template-columns: 1fr 1fr;
+                text-align: left;
+            }
+
+            .bbq-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .story-container {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .hero-title {
+                font-size: 5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">
+                Yank <span class="accent">DownUnder</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#events" class="nav-link">Events</a></li>
+                <li><a href="#menu" class="nav-link">Menu</a></li>
+                <li><a href="#story" class="nav-link">Story</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="nav-cta">Reserve Spot</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <span class="hero-badge">Real American BBQ Regions</span>
+                <h1 class="hero-title">
+                    American BBQ<br>
+                    <span class="accent">Like You've Never</span><br>
+                    <span class="accent">Experienced</span>
+                </h1>
+                <p class="hero-subtitle">
+                    I'm bringing you the distinct regional BBQ styles that make America's BBQ culture so incredible. 
+                    Kansas City burnt ends, Carolina pulled pork, Alabama white sauce, Memphis dry rubs - experience them all.
+                </p>
+                <a href="#next-event" class="hero-cta">
+                    <i class="fas fa-utensils"></i>
+                    Reserve Your Spot
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Next Event Section -->
+    <section class="next-event" id="next-event">
+        <div class="next-event-container">
+            <div class="section-header">
+                <span class="section-badge">Next Popup Event</span>
+                <h2 class="section-title">Kansas City Burnt Ends Experience</h2>
+                <p class="section-subtitle">
+                    Partner event at BBQ Galore Brisbane. Featured dish + exclusive pre-order packages + store discounts.
+                </p>
+            </div>
+
+            <div class="event-card">
+                <div class="event-header">
+                    <div>
+                        <div class="event-date">Dec 14</div>
+                        <div class="event-time">11:00 AM - 3:00 PM</div>
+                    </div>
+                    <div class="event-status">12 spots left</div>
+                </div>
+                
+                <h3 class="event-title">Kansas City Burnt Ends + Take-Home Packages</h3>
+                
+                <p class="event-description">
+                    Taste authentic Kansas City burnt ends with their signature molasses-based sauce. 
+                    Plus exclusive access to pre-order take-home BBQ packages and 15% off BBQ Galore purchases.
+                </p>
+                
+                <button class="event-cta">
+                    Reserve Your Spot - $25
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured BBQ Section -->
+    <section class="featured-bbq" id="menu">
+        <div class="featured-container">
+            <div class="section-header">
+                <span class="section-badge">Take-Home BBQ Packages</span>
+                <h2 class="section-title">Regional American BBQ</h2>
+                <p class="section-subtitle">
+                    Pre-order exclusive packages featuring different American BBQ regions. Vacuum-sealed, 
+                    freeze-friendly, and ready when you are.
+                </p>
+            </div>
+
+            <div class="bbq-grid">
+                <div class="bbq-card">
+                    <div class="bbq-image">
+                        <div class="bbq-badge">Kansas City</div>
+                    </div>
+                    <div class="bbq-content">
+                        <h3 class="bbq-title">Burnt Ends Package</h3>
+                        <p class="bbq-description">
+                            Kansas City-style burnt ends with molasses-based sauce. The "candy" of BBQ. 
+                            Vacuum-sealed for your freezer.
+                        </p>
+                        <div class="bbq-footer">
+                            <span class="bbq-price">$35</span>
+                            <button class="bbq-cta">Pre-Order</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bbq-card">
+                    <div class="bbq-image">
+                        <div class="bbq-badge">Carolina</div>
+                    </div>
+                    <div class="bbq-content">
+                        <h3 class="bbq-title">Pulled Pork Package</h3>
+                        <p class="bbq-description">
+                            Eastern Carolina whole-hog pulled pork with vinegar-based sauce. 
+                            Traditional low country BBQ at its finest.
+                        </p>
+                        <div class="bbq-footer">
+                            <span class="bbq-price">$32</span>
+                            <button class="bbq-cta">Pre-Order</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bbq-card">
+                    <div class="bbq-image">
+                        <div class="bbq-badge">Memphis</div>
+                    </div>
+                    <div class="bbq-content">
+                        <h3 class="bbq-title">Dry Rub Ribs Package</h3>
+                        <p class="bbq-description">
+                            Memphis-style dry rub ribs - no sauce needed. The rub speaks for itself. 
+                            Authentic Beale Street tradition.
+                        </p>
+                        <div class="bbq-footer">
+                            <span class="bbq-price">$42</span>
+                            <button class="bbq-cta">Pre-Order</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="story" id="story">
+        <div class="story-container">
+            <div class="story-content">
+                <h2>Why I'm Bringing Regional American BBQ to Australia</h2>
+                <p>
+                    Here's what drives me crazy about BBQ in Australia - everyone thinks American BBQ is just one thing. 
+                    But I've spent 20+ years learning that Kansas City does burnt ends completely different than Texas brisket. 
+                    Carolina whole-hog is nothing like Memphis ribs.
+                </p>
+                <p>
+                    I want you to experience what real American BBQ diversity tastes like. Each region has its own techniques, 
+                    rubs, sauces, and traditions. That's the beauty of American BBQ culture - and that's what I'm bringing to Australia.
+                </p>
+                <a href="#" class="story-cta">
+                    Learn About BBQ Regions
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="story-image"></div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <div class="social-proof-container">
+            <blockquote class="testimonial">
+                "Finally someone who understands that American BBQ isn't just one style! 
+                Those Kansas City burnt ends were exactly like what I had in Missouri. Can't wait for the next region!"
+            </blockquote>
+            <div class="testimonial-author">— Marcus T., Gold Coast</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">
+                Yank <span style="color: var(--warm-copper);">DownUnder</span> BBQ
+            </div>
+            
+            <div class="footer-social">
+                <a href="#" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" aria-label="Facebook">
+                    <i class="fab fa-facebook"></i>
+                </a>
+                <a href="#" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+            
+            <p class="footer-text">
+                Regional American BBQ popup experiences in Australia. 
+                Follow us for event announcements and BBQ education content.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.nav');
+            if (window.scrollY > 100) {
+                nav.style.backgroundColor = 'rgba(254, 254, 254, 0.98)';
+                nav.style.boxShadow = '0 2px 20px rgba(42, 42, 42, 0.1)';
+            } else {
+                nav.style.backgroundColor = 'rgba(254, 254, 254, 0.95)';
+                nav.style.boxShadow = 'none';
+            }
+        });
+
+        // Simple scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Add animation classes and observe elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const animateElements = document.querySelectorAll('.bbq-card, .event-card, .story-content, .story-image');
+            
+            animateElements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+
+        // Add mobile menu toggle functionality
+        const createMobileMenu = () => {
+            const nav = document.querySelector('.nav-container');
+            const menuButton = document.createElement('button');
+            menuButton.innerHTML = '<i class="fas fa-bars"></i>';
+            menuButton.className = 'mobile-menu-btn';
+            menuButton.style.cssText = `
+                display: none;
+                background: none;
+                border: none;
+                font-size: 1.2rem;
+                color: var(--text-primary);
+                cursor: pointer;
+                padding: var(--space-2);
+            `;
+
+            // Add mobile styles
+            const style = document.createElement('style');
+            style.textContent = `
+                @media (max-width: 767px) {
+                    .mobile-menu-btn {
+                        display: block !important;
+                    }
+                    .nav-links {
+                        display: none !important;
+                    }
+                    .nav-cta {
+                        font-size: 0.75rem !important;
+                        padding: var(--space-2) var(--space-4) !important;
+                        min-width: 100px !important;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+
+            nav.appendChild(menuButton);
+        };
+
+        createMobileMenu();
+    </script>
+</body>
+</html>
+            

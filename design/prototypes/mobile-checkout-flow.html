@@ -1,0 +1,2224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Kansas City BBQ Experience</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Import Design System */
+        @import url('https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            /* Brand Colors */
+            --charcoal: #2a2a2a;
+            --warm-copper: #b85c38;
+            --soft-copper: #d4a574;
+            --cream: #f7f5f1;
+            --off-black: #1a1a1a;
+            --warm-white: #fefefe;
+            
+            /* Semantic Colors */
+            --text-primary: var(--off-black);
+            --text-secondary: var(--charcoal);
+            --text-muted: #6a6a6a;
+            --text-inverse: var(--warm-white);
+            
+            --bg-primary: var(--warm-white);
+            --bg-secondary: var(--cream);
+            --bg-dark: var(--charcoal);
+            
+            --accent-primary: var(--warm-copper);
+            --accent-secondary: var(--soft-copper);
+            --accent-hover: #a04d2f;
+            
+            /* Typography */
+            --font-display: 'Anek Devanagari', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            
+            /* Spacing */
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            
+            /* Transitions */
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Shadows */
+            --shadow-subtle: 0 2px 8px rgba(42, 42, 42, 0.08);
+            --shadow-medium: 0 4px 16px rgba(42, 42, 42, 0.12);
+            --shadow-strong: 0 8px 32px rgba(42, 42, 42, 0.16);
+            --shadow-copper: 0 4px 16px rgba(184, 92, 56, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.5;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Mobile Container */
+        .mobile-container {
+            max-width: 414px;
+            margin: 0 auto;
+            background-color: var(--bg-primary);
+            min-height: 100vh;
+            position: relative;
+            box-shadow: var(--shadow-strong);
+        }
+
+        /* Header */
+        .checkout-header {
+            background: linear-gradient(135deg, var(--charcoal) 0%, #1f1f1f 100%);
+            color: var(--text-inverse);
+            padding: var(--space-4);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .back-button {
+            background: none;
+            border: none;
+            color: var(--text-inverse);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: var(--space-2);
+            border-radius: var(--space-2);
+            transition: background-color var(--transition-fast);
+        }
+
+        .back-button:hover {
+            background-color: rgba(254, 254, 254, 0.1);
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header-main-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: var(--space-1);
+        }
+
+        .header-subtitle {
+            font-size: 0.875rem;
+            color: rgba(254, 254, 254, 0.7);
+        }
+
+        .header-step {
+            background: rgba(184, 92, 56, 0.2);
+            color: var(--warm-copper);
+            padding: var(--space-1) var(--space-3);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 4px;
+            background-color: rgba(184, 92, 56, 0.2);
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--warm-copper) 0%, var(--soft-copper) 100%);
+            width: 33%;
+            transition: width var(--transition-slow);
+        }
+
+        /* Step Content Container */
+        .step-content {
+            display: block;
+        }
+
+        .step-content.hidden {
+            display: none;
+        }
+
+        /* Cart Summary */
+        .cart-summary {
+            background: linear-gradient(135deg, var(--cream) 0%, #f2efe9 100%);
+            padding: var(--space-6) var(--space-4);
+            border-bottom: 1px solid rgba(42, 42, 42, 0.1);
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-4);
+        }
+
+        .cart-title {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .cart-count {
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .cart-total-preview {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-label {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .total-amount {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--warm-copper);
+        }
+
+        .savings-indicator {
+            font-size: 0.875rem;
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        /* Cart Items */
+        .cart-items {
+            padding: var(--space-6) var(--space-4);
+        }
+
+        .cart-item {
+            background-color: var(--bg-primary);
+            border-radius: var(--space-4);
+            padding: var(--space-4);
+            margin-bottom: var(--space-4);
+            box-shadow: var(--shadow-subtle);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cart-item.featured {
+            border: 2px solid var(--warm-copper);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #faf9f7 100%);
+        }
+
+        .cart-item.featured::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--warm-copper), var(--soft-copper));
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-3);
+        }
+
+        .item-badge {
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+            padding: var(--space-1) var(--space-3);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .item-badge.event {
+            background-color: var(--charcoal);
+        }
+
+        .item-badge.premium {
+            background: linear-gradient(135deg, var(--warm-copper) 0%, #d4654a 100%);
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: var(--space-1);
+            border-radius: var(--space-1);
+            transition: all var(--transition-fast);
+        }
+
+        .remove-item:hover {
+            color: #e74c3c;
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .item-title {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+        }
+
+        .item-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-3);
+            line-height: 1.5;
+        }
+
+        .item-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+        }
+
+        .quantity-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(42, 42, 42, 0.2);
+            background-color: var(--bg-primary);
+            border-radius: var(--space-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .quantity-btn:hover {
+            border-color: var(--warm-copper);
+            color: var(--warm-copper);
+        }
+
+        .quantity-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quantity-display {
+            font-family: var(--font-display);
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-primary);
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .item-price {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .item-price-current {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--warm-copper);
+        }
+
+        .item-price-original {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        /* Upsell Section */
+        .upsell-section {
+            background: linear-gradient(135deg, rgba(184, 92, 56, 0.05) 0%, rgba(212, 164, 116, 0.05) 100%);
+            padding: var(--space-6) var(--space-4);
+            border-top: 1px solid rgba(42, 42, 42, 0.1);
+            border-bottom: 1px solid rgba(42, 42, 42, 0.1);
+        }
+
+        .upsell-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-4);
+        }
+
+        .upsell-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--warm-copper) 0%, var(--soft-copper) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--warm-white);
+            font-size: 0.75rem;
+        }
+
+        .upsell-title {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .upsell-items {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .upsell-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-3);
+            background-color: var(--bg-primary);
+            border-radius: var(--space-3);
+            border: 1px solid rgba(42, 42, 42, 0.1);
+            transition: all var(--transition-medium);
+        }
+
+        .upsell-item:hover {
+            border-color: var(--warm-copper);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .upsell-info {
+            flex: 1;
+        }
+
+        .upsell-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            margin-bottom: var(--space-1);
+        }
+
+        .upsell-desc {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .upsell-price {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--warm-copper);
+            margin: 0 var(--space-3);
+        }
+
+        .add-upsell-btn {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--warm-copper) 0%, var(--soft-copper) 100%);
+            border: none;
+            border-radius: 50%;
+            color: var(--warm-white);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+        }
+
+        .add-upsell-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-copper);
+        }
+
+        .add-upsell-btn.added {
+            background: #27ae60;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            padding: var(--space-6) var(--space-4);
+            background-color: var(--bg-primary);
+        }
+
+        .summary-title {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+        }
+
+        .summary-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-2) 0;
+            font-size: 0.875rem;
+        }
+
+        .summary-line.total {
+            border-top: 1px solid rgba(42, 42, 42, 0.1);
+            padding-top: var(--space-4);
+            margin-top: var(--space-3);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+        }
+
+        .summary-value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .summary-value.savings {
+            color: #27ae60;
+        }
+
+        .summary-value.total {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--warm-copper);
+        }
+
+        /* Checkout Actions */
+        .checkout-actions {
+            padding: var(--space-4);
+            background-color: var(--bg-primary);
+            border-top: 1px solid rgba(42, 42, 42, 0.1);
+            position: sticky;
+            bottom: 0;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--warm-copper) 0%, #d4654a 100%);
+            color: var(--warm-white);
+            padding: var(--space-5);
+            border: none;
+            border-radius: var(--space-4);
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            box-shadow: var(--shadow-copper);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .checkout-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left var(--transition-slow);
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(184, 92, 56, 0.3);
+        }
+
+        .checkout-btn:hover::before {
+            left: 100%;
+        }
+
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            margin-top: var(--space-3);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .security-note i {
+            color: #27ae60;
+        }
+
+        /* Urgency Banner */
+        .urgency-banner {
+            background: linear-gradient(135deg, #d4654a 0%, var(--warm-copper) 100%);
+            color: var(--warm-white);
+            padding: var(--space-3) var(--space-4);
+            text-align: center;
+            font-size: 0.875rem;
+            font-weight: 600;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(184, 92, 56, 0.4); }
+            50% { box-shadow: 0 0 0 4px rgba(184, 92, 56, 0); }
+        }
+
+        .urgency-icon {
+            margin-right: var(--space-2);
+        }
+
+        /* Loading States */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: var(--warm-white);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Success States */
+        .success {
+            color: #27ae60;
+        }
+
+        .success-checkmark {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: #27ae60;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .success-checkmark::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Payment Form Styles */
+        .payment-form {
+            padding: var(--space-6) var(--space-4);
+            background-color: var(--bg-primary);
+        }
+
+        .form-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-8);
+            text-align: center;
+        }
+
+        .form-section {
+            margin-bottom: var(--space-8);
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-5);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4);
+        }
+
+        .form-label {
+            display: block;
+            font-family: var(--font-display);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: var(--space-4);
+            border: 2px solid rgba(42, 42, 42, 0.1);
+            border-radius: var(--space-3);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--text-primary);
+            background-color: var(--bg-primary);
+            transition: all var(--transition-fast);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--warm-copper);
+            box-shadow: 0 0 0 3px rgba(184, 92, 56, 0.1);
+        }
+
+        .input-hint {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: var(--space-1);
+        }
+
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-3);
+        }
+
+        .payment-method {
+            display: block;
+            cursor: pointer;
+        }
+
+        .payment-method input[type="radio"] {
+            display: none;
+        }
+
+        .method-content {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4);
+            border: 2px solid rgba(42, 42, 42, 0.1);
+            border-radius: var(--space-3);
+            background-color: var(--bg-primary);
+            transition: all var(--transition-medium);
+        }
+
+        .payment-method.active .method-content {
+            border-color: var(--warm-copper);
+            background-color: rgba(184, 92, 56, 0.05);
+        }
+
+        .method-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--warm-copper) 0%, var(--soft-copper) 100%);
+            border-radius: var(--space-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--warm-white);
+            font-size: 1.125rem;
+        }
+
+        .method-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .method-name {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .method-description {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .method-badges {
+            display: flex;
+            gap: var(--space-2);
+            font-size: 1.25rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- Header -->
+        <header class="checkout-header">
+            <div class="header-content">
+                <button class="back-button" onclick="goBack()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="header-title">
+                    <h1 class="header-main-title">Your Order</h1>
+                    <p class="header-subtitle">Kansas City BBQ Experience</p>
+                </div>
+                <div class="header-step">Step 1/3</div>
+            </div>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+
+        <!-- Step 1: Cart Review -->
+        <div class="step-content" id="step1">
+            <!-- Urgency Banner -->
+            <div class="urgency-banner">
+                <i class="fas fa-clock urgency-icon"></i>
+                12 spots left • Event in 5 days
+            </div>
+
+            <!-- Cart Summary -->
+            <section class="cart-summary">
+                <div class="cart-header">
+                    <h2 class="cart-title">Your Cart</h2>
+                    <div class="cart-count">3</div>
+                </div>
+                <div class="cart-total-preview">
+                    <span class="total-label">Total</span>
+                    <div>
+                        <div class="total-amount">$82</div>
+                        <div class="savings-indicator">Save $15</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cart Items -->
+            <section class="cart-items">
+                <!-- Event Entry -->
+                <div class="cart-item">
+                    <div class="item-header">
+                        <div class="item-badge event">Event Entry</div>
+                        <button class="remove-item" onclick="showNotification('Event entry is required', 'warning')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <h3 class="item-title">Kansas City BBQ Experience</h3>
+                    <p class="item-description">
+                        Burnt ends tasting, BBQ education, store access, and pre-order privileges
+                    </p>
+                    <div class="item-details">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" disabled>
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="quantity-display">1</span>
+                            <button class="quantity-btn" disabled>
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="item-price">
+                            <div class="item-price-current">$25</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premium Package -->
+                <div class="cart-item featured">
+                    <div class="item-header">
+                        <div class="item-badge premium">Most Popular</div>
+                        <button class="remove-item" onclick="showNotification('Item removed', 'success')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <h3 class="item-title">Burnt Ends Master Package</h3>
+                    <p class="item-description">
+                        2lbs burnt ends, molasses sauce, KC rub, bread & pickles, instructions
+                    </p>
+                    <div class="item-details">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="showNotification('Quantity updated', 'success')">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="quantity-display">2</span>
+                            <button class="quantity-btn" onclick="showNotification('Quantity updated', 'success')">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="item-price">
+                            <div class="item-price-current">$16</div>
+                            <div class="item-price-original">$8 each</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upsell Section -->
+            <section class="upsell-section">
+                <div class="upsell-header">
+                    <div class="upsell-icon">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <h3 class="upsell-title">Complete Your BBQ Experience</h3>
+                </div>
+                
+                <div class="upsell-items">
+                    <div class="upsell-item">
+                        <div class="upsell-info">
+                            <div class="upsell-name">KC Rub Blend</div>
+                            <div class="upsell-desc">4oz signature dry rub</div>
+                        </div>
+                        <div class="upsell-price">+$12</div>
+                        <button class="add-upsell-btn" onclick="addUpsell(this)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+
+                    <div class="upsell-item">
+                        <div class="upsell-info">
+                            <div class="upsell-name">BBQ History Guide</div>
+                            <div class="upsell-desc">Regional stories & tips</div>
+                        </div>
+                        <div class="upsell-price">+$5</div>
+                        <button class="add-upsell-btn" onclick="addUpsell(this)">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Order Summary -->
+            <section class="order-summary">
+                <h3 class="summary-title">Order Summary</h3>
+                
+                <div class="summary-line">
+                    <span class="summary-label">Event Entry</span>
+                    <span class="summary-value">$25.00</span>
+                </div>
+                
+                <div class="summary-line">
+                    <span class="summary-label">Burnt Ends Package</span>
+                    <span class="summary-value">$35.00</span>
+                </div>
+                
+                <div class="summary-line">
+                    <span class="summary-label">Extra Sauce (2x)</span>
+                    <span class="summary-value">$16.00</span>
+                </div>
+                
+                <div class="summary-line">
+                    <span class="summary-label">Subtotal</span>
+                    <span class="summary-value">$76.00</span>
+                </div>
+                
+                <div class="summary-line">
+                    <span class="summary-label">Event Savings</span>
+                    <span class="summary-value savings">-$15.00</span>
+                </div>
+                
+                <div class="summary-line">
+                    <span class="summary-label">Store Discount (15%)</span>
+                    <span class="summary-value savings">Available at event</span>
+                </div>
+                
+                <div class="summary-line total">
+                    <span class="summary-label">Total</span>
+                    <span class="summary-value total">$82.00</span>
+                </div>
+            </section>
+
+            <!-- Checkout Actions -->
+            <section class="checkout-actions">
+                <button class="checkout-btn" onclick="proceedToPayment()">
+                    <i class="fas fa-lock"></i>
+                    Secure Checkout - $82
+                </button>
+                <div class="security-note">
+                    <i class="fas fa-shield-alt"></i>
+                    256-bit SSL encryption • Your data is secure
+                </div>
+            </section>
+        </div>
+
+        <!-- Step 2: Payment Form -->
+        <div class="step-content hidden" id="step2">
+            <!-- Trust Banner -->
+            <div style="background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%); color: white; padding: 12px 16px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; text-align: center;">
+                        <i class="fas fa-shield-alt" style="font-size: 18px;"></i>
+                        <span>SSL Secured</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; text-align: center;">
+                        <i class="fas fa-lock" style="font-size: 18px;"></i>
+                        <span>256-bit Encryption</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; text-align: center;">
+                        <i class="fas fa-credit-card" style="font-size: 18px;"></i>
+                        <span>PCI Compliant</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collapsible Order Summary -->
+            <section style="background-color: var(--bg-primary); border-bottom: 1px solid rgba(42, 42, 42, 0.1);">
+                <button onclick="toggleSummary()" style="width: 100%; background: none; border: none; padding: 16px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex: 1;">
+                        <span style="font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--text-primary);">Order Summary</span>
+                        <span style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--warm-copper);">$82.00</span>
+                    </div>
+                    <i class="fas fa-chevron-down" style="color: var(--text-muted); margin-left: 16px; transition: transform 0.3s ease;" id="summaryChevron"></i>
+                </button>
+                
+                <div id="summaryDetails" style="max-height: 0; overflow: hidden; transition: max-height 0.5s ease;">
+                    <div style="padding: 0 16px 16px; border-top: 1px solid rgba(42, 42, 42, 0.1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px;">
+                            <span>Kansas City BBQ Experience</span>
+                            <span>$25.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px;">
+                            <span>Burnt Ends Master Package</span>
+                            <span>$35.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px;">
+                            <span>Extra Molasses Sauce (2x)</span>
+                            <span>$16.00</span>
+                        </div>
+                        <div style="height: 1px; background-color: rgba(42, 42, 42, 0.1); margin: 12px 0;"></div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px;">
+                            <span>Subtotal</span>
+                            <span>$76.00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 14px; color: #27ae60;">
+                            <span>Event Savings</span>
+                            <span>-$15.00</span>
+                        </div>
+                        <div style="height: 1px; background-color: rgba(42, 42, 42, 0.1); margin: 12px 0;"></div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 12px; font-weight: 700; font-size: 16px;">
+                            <span>Total</span>
+                            <span style="font-family: var(--font-display); font-size: 24px; color: var(--warm-copper);">$82.00</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Payment Form -->
+            <section class="payment-form">
+                <h2 class="form-title">Payment Information</h2>
+                
+                <!-- Contact Information -->
+                <div class="form-section">
+                    <h3 class="section-title">Contact Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" id="email" name="email" class="form-input" 
+                               placeholder="your@email.com" required>
+                        <div class="input-hint">We'll send your confirmation and pickup details here</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text" id="firstName" name="firstName" class="form-input" 
+                                   placeholder="John" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" class="form-input" 
+                                   placeholder="Smith" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" class="form-input" 
+                               placeholder="+61 4XX XXX XXX" required>
+                        <div class="input-hint">For event updates and pickup coordination</div>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="form-section">
+                    <h3 class="section-title">Payment Method</h3>
+                    
+                    <div class="payment-methods">
+                        <label class="payment-method active" for="cardPayment">
+                            <input type="radio" id="cardPayment" name="paymentMethod" value="card" checked>
+                            <div class="method-content">
+                                <div class="method-icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                                <div class="method-info">
+                                    <span class="method-name">Credit/Debit Card</span>
+                                    <span class="method-description">Visa, Mastercard, Amex</span>
+                                </div>
+                                <div class="method-badges">
+                                    <i class="fab fa-cc-visa"></i>
+                                    <i class="fab fa-cc-mastercard"></i>
+                                    <i class="fab fa-cc-amex"></i>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="payment-method" for="paypalPayment">
+                            <input type="radio" id="paypalPayment" name="paymentMethod" value="paypal">
+                            <div class="method-content">
+                                <div class="method-icon">
+                                    <i class="fab fa-paypal"></i>
+                                </div>
+                                <div class="method-info">
+                                    <span class="method-name">PayPal</span>
+                                    <span class="method-description">Pay with your PayPal account</span>
+                                </div>
+                                <div style="background-color: var(--warm-copper); color: var(--warm-white); padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase;">Express</div>
+                            </div>
+                        </label>
+
+                        <label class="payment-method" for="afterpayPayment">
+                            <input type="radio" id="afterpayPayment" name="paymentMethod" value="afterpay">
+                            <div class="method-content">
+                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #b2fce4 0%, #06ffa5 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--charcoal); font-family: var(--font-display); font-weight: 800; font-size: 18px;">
+                                    A
+                                </div>
+                                <div class="method-info">
+                                    <span class="method-name">Afterpay</span>
+                                    <span class="method-description">4 payments of $20.50</span>
+                                </div>
+                                <div style="background: linear-gradient(135deg, #06ffa5 0%, #00d4aa 100%); color: var(--charcoal); padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase;">Buy Now, Pay Later</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Card Details -->
+                <div class="form-section" id="cardDetails">
+                    <h3 class="section-title">Card Details</h3>
+                    
+                    <div class="form-group">
+                        <label for="cardNumber" class="form-label">Card Number</label>
+                        <input type="text" id="cardNumber" name="cardNumber" class="form-input" 
+                               placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiryDate" class="form-label">Expiry Date</label>
+                            <input type="text" id="expiryDate" name="expiryDate" class="form-input" 
+                                   placeholder="MM/YY" maxlength="5">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" id="cvv" name="cvv" class="form-input" 
+                                   placeholder="123" maxlength="4">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cardName" class="form-label">Name on Card</label>
+                        <input type="text" id="cardName" name="cardName" class="form-input" 
+                               placeholder="John Smith" required>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Payment Actions -->
+            <section class="checkout-actions">
+                <div style="background: linear-gradient(135deg, var(--cream) 0%, #f2efe9 100%); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-family: var(--font-display); font-size: 18px; font-weight: 600; color: var(--text-primary);">Total</span>
+                        <span style="font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--warm-copper);">$82.00</span>
+                    </div>
+                    <div style="font-size: 14px; color: var(--text-muted); text-align: center; margin-top: 8px;">
+                        Including all items, savings applied
+                    </div>
+                </div>
+                
+                <button class="checkout-btn" onclick="processPayment()">
+                    <i class="fas fa-lock"></i>
+                    Complete Secure Payment
+                </button>
+                
+                <div style="text-align: center;">
+                    <div style="display: flex; justify-content: center; gap: 16px; margin-bottom: 8px;">
+                        <div style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-muted);">
+                            <i class="fas fa-shield-alt" style="color: #27ae60;"></i>
+                            <span>SSL Secured</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-muted);">
+                            <i class="fas fa-lock" style="color: #27ae60;"></i>
+                            <span>Encrypted</span>
+                        </div>
+                    </div>
+                    <div style="font-size: 12px; color: var(--text-muted);">
+                        Your payment information is encrypted and secure
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+
+        // Upsell functionality
+        function addUpsell(button) {
+            if (!button.classList.contains('added')) {
+                button.classList.add('added');
+                button.innerHTML = '<i class="fas fa-check"></i>';
+                
+                const upsellElement = button.closest('.upsell-item');
+                upsellElement.style.transform = 'scale(1.02)';
+                upsellElement.style.backgroundColor = 'rgba(39, 174, 96, 0.1)';
+                
+                setTimeout(() => {
+                    upsellElement.style.transform = '';
+                    upsellElement.style.backgroundColor = '';
+                }, 500);
+                
+                showNotification('Added to cart!', 'success');
+            }
+        }
+
+        // Navigation
+        function goBack() {
+            if (currentStep === 1) {
+                if (confirm('Are you sure you want to go back? Your cart will be saved.')) {
+                    showNotification('Going back...', 'info');
+                }
+            } else {
+                goBackToCart();
+            }
+        }
+
+        function goBackToCart() {
+            if (confirm('Are you sure you want to go back? Your payment details will be lost.')) {
+                currentStep = 1;
+                updateStep();
+                updateHeader('Your Order', 'Kansas City BBQ Experience', 'Step 1/3');
+                document.querySelector('.progress-fill').style.width = '33%';
+            }
+        }
+
+        function proceedToPayment() {
+            const checkoutBtn = document.querySelector('.checkout-btn');
+            const originalContent = checkoutBtn.innerHTML;
+            
+            checkoutBtn.classList.add('loading');
+            checkoutBtn.innerHTML = '<div class="spinner"></div> Processing...';
+            
+            setTimeout(() => {
+                currentStep = 2;
+                updateStep();
+                updateHeader('Payment Details', 'Secure payment processing', 'Step 2/3');
+                document.querySelector('.progress-fill').style.width = '66%';
+                
+                showNotification('Loading payment form...', 'success');
+                
+                // Initialize payment form
+                initializePaymentForm();
+            }, 1500);
+        }
+
+        function processPayment() {
+            const paymentBtn = document.querySelector('#step2 .checkout-btn');
+            
+            paymentBtn.disabled = true;
+            paymentBtn.innerHTML = '<div class="spinner"></div> Processing Payment...';
+            
+            setTimeout(() => {
+                currentStep = 3;
+                updateStep();
+                updateHeader('Order Confirmed', 'Your BBQ experience is reserved', 'Step 3/3');
+                document.querySelector('.progress-fill').style.width = '100%';
+                
+                showNotification('Payment successful! Order confirmed.', 'success');
+            }, 3000);
+        }
+
+        function updateStep() {
+            document.getElementById('step1').classList.toggle('hidden', currentStep !== 1);
+            document.getElementById('step2').classList.toggle('hidden', currentStep !== 2);
+            
+            // Show order confirmation if step 3
+            if (currentStep === 3) {
+                showOrderConfirmation();
+            }
+        }
+
+        function showOrderConfirmation() {
+            const container = document.querySelector('.mobile-container');
+            
+            // Keep header and progress bar, replace content
+            const headerHTML = container.querySelector('.checkout-header').outerHTML;
+            const progressHTML = container.querySelector('.progress-bar').outerHTML;
+            
+            container.innerHTML = `
+                ${headerHTML}
+                ${progressHTML}
+                
+                <!-- Order Confirmation -->
+                <div class="confirmation-content">
+                    <!-- Success Header -->
+                    <div class="success-header">
+                        <div class="success-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h1 class="success-title">Order Confirmed!</h1>
+                        <p class="success-subtitle">Your Kansas City BBQ experience is reserved</p>
+                        <div class="order-number">Order #KC-2024-1214-001</div>
+                    </div>
+
+                    <!-- Event Details -->
+                    <div class="event-details-card">
+                        <div class="card-header">
+                            <h2 class="card-title">Your Event Details</h2>
+                            <div class="event-status">Confirmed</div>
+                        </div>
+                        
+                        <div class="event-info">
+                            <div class="info-row">
+                                <div class="info-icon">
+                                    <i class="fas fa-calendar"></i>
+                                </div>
+                                <div class="info-content">
+                                    <div class="info-label">Date & Time</div>
+                                    <div class="info-value">Saturday, December 14</div>
+                                    <div class="info-sub">11:00 AM - 3:00 PM</div>
+                                </div>
+                            </div>
+
+                            <div class="info-row">
+                                <div class="info-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="info-content">
+                                    <div class="info-label">Location</div>
+                                    <div class="info-value">Turn Left @ Albuquerque</div>
+                                    <div class="info-sub">123 Queen Street, Brisbane CBD</div>
+                                </div>
+                            </div>
+
+                            <div class="info-row">
+                                <div class="info-icon">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="info-content">
+                                    <div class="info-label">What to Expect</div>
+                                    <div class="info-value">Kansas City Burnt Ends Tasting</div>
+                                    <div class="info-sub">Education session + store benefits</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="add-to-calendar">
+                            <button class="calendar-btn" onclick="addToCalendar()">
+                                <i class="fas fa-calendar-plus"></i>
+                                Add to Calendar
+                            </button>
+                            <button class="directions-btn" onclick="getDirections()">
+                                <i class="fas fa-directions"></i>
+                                Get Directions
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Pre-Order Summary -->
+                    <div class="preorder-summary-card">
+                        <div class="card-header">
+                            <h2 class="card-title">Your Pre-Orders</h2>
+                            <div class="pickup-status">Ready for Pickup</div>
+                        </div>
+                        
+                        <div class="preorder-items">
+                            <div class="preorder-item">
+                                <div class="item-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="item-details">
+                                    <div class="item-name">Burnt Ends Master Package</div>
+                                    <div class="item-description">2lbs burnt ends + molasses sauce + KC rub</div>
+                                </div>
+                                <div class="item-price">$35</div>
+                            </div>
+
+                            <div class="preorder-item">
+                                <div class="item-icon">
+                                    <i class="fas fa-bottle-water"></i>
+                                </div>
+                                <div class="item-details">
+                                    <div class="item-name">Extra Molasses Sauce (2x)</div>
+                                    <div class="item-description">4oz bottles of house-made sauce</div>
+                                </div>
+                                <div class="item-price">$16</div>
+                            </div>
+                        </div>
+
+                        <div class="pickup-instructions">
+                            <div class="instruction-header">
+                                <i class="fas fa-hand-holding"></i>
+                                <span>Pickup Instructions</span>
+                            </div>
+                            <div class="instruction-text">
+                                Collect your pre-orders between 1:00 PM - 3:00 PM at the event. 
+                                Look for the "Pre-Order Pickup" station inside Turn Left @ Albuquerque.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Next Steps -->
+                    <div class="next-steps-card">
+                        <h2 class="card-title">What Happens Next?</h2>
+                        
+                        <div class="steps-timeline">
+                            <div class="timeline-step completed">
+                                <div class="step-marker">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                <div class="step-content">
+                                    <div class="step-title">Order Confirmed</div>
+                                    <div class="step-description">Payment processed successfully</div>
+                                </div>
+                            </div>
+
+                            <div class="timeline-step active">
+                                <div class="step-marker">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+                                <div class="step-content">
+                                    <div class="step-title">Confirmation Email</div>
+                                    <div class="step-description">Sent to your email within 5 minutes</div>
+                                </div>
+                            </div>
+
+                            <div class="timeline-step">
+                                <div class="step-marker">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="step-content">
+                                    <div class="step-title">Event Reminder</div>
+                                    <div class="step-description">24 hours before the event</div>
+                                </div>
+                            </div>
+
+                            <div class="timeline-step">
+                                <div class="step-marker">
+                                    <i class="fas fa-utensils"></i>
+                                </div>
+                                <div class="step-content">
+                                    <div class="step-title">BBQ Experience</div>
+                                    <div class="step-description">Saturday, Dec 14 at 11:00 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Support -->
+                    <div class="support-card">
+                        <div class="support-content">
+                            <div class="support-icon">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <div class="support-text">
+                                <div class="support-title">Need Help?</div>
+                                <div class="support-description">Questions about your order or the event?</div>
+                            </div>
+                        </div>
+                        
+                        <div class="support-actions">
+                            <a href="mailto:info@yankdownunder.com" class="support-btn">
+                                <i class="fas fa-envelope"></i>
+                                Email Us
+                            </a>
+                            <a href="tel:+61412345678" class="support-btn">
+                                <i class="fas fa-phone"></i>
+                                Call Us
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Share Experience -->
+                    <div class="share-card">
+                        <div class="share-header">
+                            <h2 class="card-title">Share the BBQ Love</h2>
+                            <p class="share-subtitle">Tell your friends about authentic regional BBQ</p>
+                        </div>
+                        
+                        <div class="share-buttons">
+                            <button class="share-btn facebook" onclick="shareToFacebook()">
+                                <i class="fab fa-facebook-f"></i>
+                                Facebook
+                            </button>
+                            <button class="share-btn instagram" onclick="shareToInstagram()">
+                                <i class="fab fa-instagram"></i>
+                                Instagram
+                            </button>
+                            <button class="share-btn copy" onclick="copyEventLink()">
+                                <i class="fas fa-link"></i>
+                                Copy Link
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            addConfirmationStyles();
+            updateConfirmationHeader();
+        }
+
+        function addConfirmationStyles() {
+            const style = document.createElement('style');
+            style.textContent = `
+                /* Order Confirmation Styles */
+                .confirmation-content {
+                    padding: var(--space-4);
+                    background-color: var(--bg-primary);
+                }
+
+                .success-header {
+                    text-align: center;
+                    padding: var(--space-8) var(--space-4);
+                    background: linear-gradient(135deg, var(--cream) 0%, #f2efe9 100%);
+                    border-radius: var(--space-6);
+                    margin-bottom: var(--space-6);
+                    position: relative;
+                    overflow: hidden;
+                }
+
+                .success-header::before {
+                    content: '';
+                    position: absolute;
+                    top: -50px;
+                    right: -50px;
+                    width: 100px;
+                    height: 100px;
+                    background: radial-gradient(circle, rgba(184, 92, 56, 0.1) 0%, transparent 70%);
+                    border-radius: 50%;
+                }
+
+                .success-icon {
+                    width: 80px;
+                    height: 80px;
+                    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto var(--space-4);
+                    font-size: 2rem;
+                    color: var(--warm-white);
+                    box-shadow: 0 4px 16px rgba(39, 174, 96, 0.2);
+                    animation: success-bounce 0.6s ease-out;
+                }
+
+                @keyframes success-bounce {
+                    0% { transform: scale(0); }
+                    50% { transform: scale(1.1); }
+                    100% { transform: scale(1); }
+                }
+
+                .success-title {
+                    font-family: var(--font-display);
+                    font-size: 1.75rem;
+                    font-weight: 700;
+                    color: var(--text-primary);
+                    margin-bottom: var(--space-2);
+                }
+
+                .success-subtitle {
+                    font-size: 1.125rem;
+                    color: var(--text-secondary);
+                    margin-bottom: var(--space-4);
+                }
+
+                .order-number {
+                    background-color: var(--warm-copper);
+                    color: var(--warm-white);
+                    padding: var(--space-2) var(--space-4);
+                    border-radius: 50px;
+                    font-family: var(--font-display);
+                    font-size: 0.875rem;
+                    font-weight: 600;
+                    display: inline-block;
+                }
+
+                /* Card Styles */
+                .event-details-card,
+                .preorder-summary-card,
+                .next-steps-card,
+                .support-card,
+                .share-card {
+                    background-color: var(--bg-primary);
+                    border-radius: var(--space-6);
+                    padding: var(--space-6);
+                    margin-bottom: var(--space-6);
+                    box-shadow: var(--shadow-subtle);
+                    border: 1px solid rgba(42, 42, 42, 0.05);
+                }
+
+                .card-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: var(--space-6);
+                }
+
+                .card-title {
+                    font-family: var(--font-display);
+                    font-size: 1.25rem;
+                    font-weight: 600;
+                    color: var(--text-primary);
+                }
+
+                .event-status,
+                .pickup-status {
+                    background-color: #27ae60;
+                    color: var(--warm-white);
+                    padding: var(--space-1) var(--space-3);
+                    border-radius: 50px;
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                }
+
+                .pickup-status {
+                    background-color: var(--warm-copper);
+                }
+
+                /* Event Info */
+                .event-info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--space-5);
+                    margin-bottom: var(--space-6);
+                }
+
+                .info-row {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: var(--space-4);
+                }
+
+                .info-icon {
+                    width: 40px;
+                    height: 40px;
+                    background: linear-gradient(135deg, var(--warm-copper) 0%, var(--soft-copper) 100%);
+                    border-radius: var(--space-2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: var(--warm-white);
+                    flex-shrink: 0;
+                }
+
+                .info-content {
+                    flex: 1;
+                }
+
+                .info-label {
+                    font-size: 0.875rem;
+                    color: var(--text-muted);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    font-weight: 600;
+                    margin-bottom: var(--space-1);
+                }
+
+                .info-value {
+                    font-family: var(--font-display);
+                    font-size: 1.125rem;
+                    font-weight: 600;
+                    color: var(--text-primary);
+                }
+
+                .info-sub {
+                    font-size: 0.875rem;
+                    color: var(--text-secondary);
+                }
+
+                /* Add to Calendar */
+                .add-to-calendar {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: var(--space-3);
+                }
+
+                .calendar-btn,
+                .directions-btn {
+                    padding: var(--space-3) var(--space-4);
+                    border: 2px solid var(--warm-copper);
+                    border-radius: var(--space-3);
+                    font-family: var(--font-display);
+                    font-size: 0.875rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    cursor: pointer;
+                    transition: all var(--transition-medium);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: var(--space-2);
+                }
+
+                .calendar-btn {
+                    background-color: var(--warm-copper);
+                    color: var(--warm-white);
+                }
+
+                .calendar-btn:hover {
+                    background-color: var(--accent-hover);
+                    transform: translateY(-2px);
+                }
+
+                .directions-btn {
+                    background-color: transparent;
+                    color: var(--warm-copper);
+                }
+
+                .directions-btn:hover {
+                    background-color: var(--warm-copper);
+                    color: var(--warm-white);
+                    transform: translateY(-2px);
+                }
+
+                /* Pre-order Items */
+                .preorder-items {
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--space-4);
+                    margin-bottom: var(--space-6);
+                }
+
+                .preorder-item {
+                    display: flex;
+                    align-items: center;
+                    gap: var(--space-4);
+                    padding: var(--space-4);
+                    background: rgba(184, 92, 56, 0.05);
+                    border-radius: var(--space-3);
+                }
+
+                .preorder-item .item-icon {
+                    width: 40px;
+                    height: 40px;
+                    background: linear-gradient(135deg, var(--warm-copper) 0%, var(--soft-copper) 100%);
+                    border-radius: var(--space-2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: var(--warm-white);
+                    flex-shrink: 0;
+                }
+
+                .preorder-item .item-details {
+                    flex: 1;
+                }
+
+                .preorder-item .item-name {
+                    font-family: var(--font-display);
+                    font-weight: 600;
+                    color: var(--text-primary);
+                    margin-bottom: var(--space-1);
+                }
+
+                .preorder-item .item-description {
+                    font-size: 0.875rem;
+                    color: var(--text-secondary);
+                }
+
+                .preorder-item .item-price {
+                    font-family: var(--font-display);
+                    font-size: 1.125rem;
+                    font-weight: 700;
+                    color: var(--warm-copper);
+                }
+
+                /* Pickup Instructions */
+                .pickup-instructions {
+                    background: linear-gradient(135deg, var(--charcoal) 0%, #1f1f1f 100%);
+                    border-radius: var(--space-4);
+                    padding: var(--space-4);
+                    color: var(--text-inverse);
+                }
+
+                .instruction-header {
+                    display: flex;
+                    align-items: center;
+                    gap: var(--space-2);
+                    margin-bottom: var(--space-3);
+                    font-family: var(--font-display);
+                    font-weight: 600;
+                    color: var(--warm-copper);
+                }
+
+                .instruction-text {
+                    font-size: 0.875rem;
+                    line-height: 1.6;
+                    color: rgba(254, 254, 254, 0.9);
+                }
+
+                /* Timeline Steps */
+                .steps-timeline {
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--space-4);
+                }
+
+                .timeline-step {
+                    display: flex;
+                    align-items: flex-start;
+                    gap: var(--space-4);
+                    position: relative;
+                }
+
+                .timeline-step:not(:last-child)::after {
+                    content: '';
+                    position: absolute;
+                    left: 16px;
+                    top: 40px;
+                    width: 2px;
+                    height: 20px;
+                    background-color: rgba(42, 42, 42, 0.1);
+                }
+
+                .timeline-step.completed::after,
+                .timeline-step.active::after {
+                    background-color: var(--warm-copper);
+                }
+
+                .step-marker {
+                    width: 32px;
+                    height: 32px;
+                    border: 2px solid rgba(42, 42, 42, 0.1);
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: var(--bg-primary);
+                    flex-shrink: 0;
+                }
+
+                .timeline-step.completed .step-marker {
+                    background-color: #27ae60;
+                    border-color: #27ae60;
+                    color: var(--warm-white);
+                }
+
+                .timeline-step.active .step-marker {
+                    background-color: var(--warm-copper);
+                    border-color: var(--warm-copper);
+                    color: var(--warm-white);
+                    animation: pulse-glow 2s infinite;
+                }
+
+                .step-content {
+                    flex: 1;
+                    padding-top: var(--space-1);
+                }
+
+                .step-title {
+                    font-family: var(--font-display);
+                    font-weight: 600;
+                    color: var(--text-primary);
+                    margin-bottom: var(--space-1);
+                }
+
+                .step-description {
+                    font-size: 0.875rem;
+                    color: var(--text-secondary);
+                }
+
+                /* Support Card */
+                .support-content {
+                    display: flex;
+                    align-items: center;
+                    gap: var(--space-4);
+                    margin-bottom: var(--space-4);
+                }
+
+                .support-icon {
+                    width: 50px;
+                    height: 50px;
+                    background: linear-gradient(135deg, var(--warm-copper) 0%, var(--soft-copper) 100%);
+                    border-radius: var(--space-3);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: var(--warm-white);
+                    font-size: 1.25rem;
+                }
+
+                .support-text {
+                    flex: 1;
+                }
+
+                .support-title {
+                    font-family: var(--font-display);
+                    font-weight: 600;
+                    color: var(--text-primary);
+                    margin-bottom: var(--space-1);
+                }
+
+                .support-description {
+                    font-size: 0.875rem;
+                    color: var(--text-secondary);
+                }
+
+                .support-actions {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: var(--space-3);
+                }
+
+                .support-btn {
+                    padding: var(--space-3) var(--space-4);
+                    border: 2px solid var(--warm-copper);
+                    border-radius: var(--space-3);
+                    font-family: var(--font-display);
+                    font-size: 0.875rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    text-decoration: none;
+                    cursor: pointer;
+                    transition: all var(--transition-medium);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: var(--space-2);
+                    background-color: transparent;
+                    color: var(--warm-copper);
+                }
+
+                .support-btn:hover {
+                    background-color: var(--warm-copper);
+                    color: var(--warm-white);
+                    transform: translateY(-2px);
+                }
+
+                /* Share Card */
+                .share-header {
+                    text-align: center;
+                    margin-bottom: var(--space-6);
+                }
+
+                .share-subtitle {
+                    font-size: 0.875rem;
+                    color: var(--text-secondary);
+                    margin-top: var(--space-2);
+                }
+
+                .share-buttons {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: var(--space-3);
+                }
+
+                .share-btn {
+                    padding: var(--space-4) var(--space-3);
+                    border: none;
+                    border-radius: var(--space-3);
+                    font-family: var(--font-display);
+                    font-size: 0.75rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    cursor: pointer;
+                    transition: all var(--transition-medium);
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: var(--space-2);
+                    color: var(--warm-white);
+                }
+
+                .share-btn i {
+                    font-size: 1.25rem;
+                }
+
+                .share-btn.facebook {
+                    background-color: #1877f2;
+                }
+
+                .share-btn.facebook:hover {
+                    background-color: #166fe5;
+                    transform: translateY(-2px);
+                }
+
+                .share-btn.instagram {
+                    background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+                }
+
+                .share-btn.instagram:hover {
+                    transform: translateY(-2px);
+                    box-shadow: var(--shadow-medium);
+                }
+
+                .share-btn.copy {
+                    background-color: var(--charcoal);
+                }
+
+                .share-btn.copy:hover {
+                    background-color: var(--warm-copper);
+                    transform: translateY(-2px);
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Calendar and social functions
+        function addToCalendar() {
+            const eventTitle = "Kansas City BBQ Experience - Yank DownUnder";
+            const eventDate = "20241214T110000";
+            const eventEndDate = "20241214T150000";
+            const location = "Turn Left @ Albuquerque, 123 Queen Street, Brisbane CBD";
+            const description = "Authentic Kansas City burnt ends tasting with BBQ education and store benefits";
+            
+            const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${eventDate}/${eventEndDate}&location=${encodeURIComponent(location)}&details=${encodeURIComponent(description)}`;
+            
+            window.open(calendarUrl, '_blank');
+            showNotification('Opening calendar...', 'success');
+        }
+
+        function getDirections() {
+            const address = encodeURIComponent('Turn Left @ Albuquerque, 123 Queen Street, Brisbane CBD, QLD 4000');
+            const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${address}`;
+            window.open(mapsUrl, '_blank');
+            showNotification('Opening directions...', 'success');
+        }
+
+        function shareToFacebook() {
+            const url = encodeURIComponent('https://yankdownunder.com/events/kansas-city-burnt-ends');
+            const text = encodeURIComponent('Just booked my spot at the Kansas City BBQ Experience! Authentic burnt ends and regional BBQ education 🔥');
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
+            showNotification('Sharing to Facebook...', 'success');
+        }
+
+        function shareToInstagram() {
+            showNotification('Copy the event link and share on Instagram!', 'info');
+            copyEventLink();
+        }
+
+        function copyEventLink() {
+            const eventLink = 'https://yankdownunder.com/events/kansas-city-burnt-ends';
+            navigator.clipboard.writeText(eventLink).then(() => {
+                showNotification('Event link copied to clipboard!', 'success');
+            }).catch(() => {
+                showNotification('Link: ' + eventLink, 'info');
+            });
+        }
+
+        function updateHeader(title, subtitle, step) {
+            document.querySelector('.header-main-title').textContent = title;
+            document.querySelector('.header-subtitle').textContent = subtitle;
+            document.querySelector('.header-step').textContent = step;
+        }
+
+        // Payment form functionality
+        function initializePaymentForm() {
+            // Payment method selection
+            const paymentMethods = document.querySelectorAll('input[name="paymentMethod"]');
+            const cardDetails = document.getElementById('cardDetails');
+
+            paymentMethods.forEach(method => {
+                method.addEventListener('change', function() {
+                    document.querySelectorAll('.payment-method').forEach(pm => pm.classList.remove('active'));
+                    this.closest('.payment-method').classList.add('active');
+
+                    if (this.value === 'card') {
+                        cardDetails.style.display = 'block';
+                    } else {
+                        cardDetails.style.display = 'none';
+                    }
+                });
+            });
+
+            // Card number formatting
+            const cardNumberInput = document.getElementById('cardNumber');
+            if (cardNumberInput) {
+                cardNumberInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+                    let formattedValue = value.match(/.{1,4}/g)?.join(' ');
+                    if (formattedValue) {
+                        e.target.value = formattedValue;
+                    }
+                });
+            }
+
+            // Expiry date formatting
+            const expiryInput = document.getElementById('expiryDate');
+            if (expiryInput) {
+                expiryInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.length >= 2) {
+                        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+                    }
+                    e.target.value = value;
+                });
+            }
+
+            // CVV validation
+            const cvvInput = document.getElementById('cvv');
+            if (cvvInput) {
+                cvvInput.addEventListener('input', function(e) {
+                    e.target.value = e.target.value.replace(/\D/g, '');
+                });
+            }
+
+            // Auto-populate name on card
+            const firstNameInput = document.getElementById('firstName');
+            const lastNameInput = document.getElementById('lastName');
+            const cardNameInput = document.getElementById('cardName');
+
+            function updateCardName() {
+                const firstName = firstNameInput?.value?.trim() || '';
+                const lastName = lastNameInput?.value?.trim() || '';
+                if (cardNameInput && (firstName || lastName)) {
+                    cardNameInput.value = `${firstName} ${lastName}`.trim();
+                }
+            }
+
+            if (firstNameInput) firstNameInput.addEventListener('input', updateCardName);
+            if (lastNameInput) lastNameInput.addEventListener('input', updateCardName);
+        }
+
+        // Toggle summary
+        function toggleSummary() {
+            const details = document.getElementById('summaryDetails');
+            const chevron = document.getElementById('summaryChevron');
+            
+            if (details.style.maxHeight === '0px' || !details.style.maxHeight) {
+                details.style.maxHeight = '300px';
+                chevron.style.transform = 'rotate(180deg)';
+            } else {
+                details.style.maxHeight = '0px';
+                chevron.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Notifications
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'success' ? '#27ae60' : type === 'warning' ? '#f39c12' : 'var(--warm-copper)'};
+                color: white;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 600;
+                z-index: 1000;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                max-width: 300px;
+                text-align: center;
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.style.opacity = '1', 100);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add touch feedback for buttons
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                button.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html>Notification('Quantity updated', 'success')">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="quantity-display">1</span>
+                            <button class="quantity-btn" onclick="showNotification('Quantity updated', 'success')">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="item-price">
+                            <div class="item-price-current">$35</div>
+                            <div class="item-price-original">$42</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add-on -->
+                <div class="cart-item">
+                    <div class="item-header">
+                        <div class="item-badge">Add-on</div>
+                        <button class="remove-item" onclick="showNotification('Item removed', 'success')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <h3 class="item-title">Extra Molasses Sauce</h3>
+                    <p class="item-description">
+                        Additional 4oz bottle of house-made molasses BBQ sauce
+                    </p>
+                    <div class="item-details">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="show

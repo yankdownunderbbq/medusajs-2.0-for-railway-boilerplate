@@ -32,8 +32,8 @@ const config: Config = {
         'accent-hover': '#a04d2f',
       },
       fontFamily: {
-        'display': ['Anek Devanagari', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        'body': ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        'display': ['var(--font-anek-devanagari)', 'Anek Devanagari', 'sans-serif'],
+        'body': ['var(--font-inter)', 'Inter', 'sans-serif'],
       },
       spacing: {
         '1': '0.25rem',   // 4px

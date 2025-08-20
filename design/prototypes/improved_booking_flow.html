@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Kansas City BBQ Experience</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Import Design System */
+        @import url('https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@400;500;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            /* Brand Colors */
+            --charcoal: #2a2a2a;
+            --warm-copper: #b85c38;
+            --soft-copper: #d4a574;
+            --cream: #f7f5f1;
+            --off-black: #1a1a1a;
+            --warm-white: #fefefe;
+            
+            /* Semantic Colors */
+            --text-primary: var(--off-black);
+            --text-secondary: var(--charcoal);
+            --text-muted: #6a6a6a;
+            --text-inverse: var(--warm-white);
+            
+            --bg-primary: var(--warm-white);
+            --bg-secondary: var(--cream);
+            --bg-dark: var(--charcoal);
+            
+            --accent-primary: var(--warm-copper);
+            --accent-secondary: var(--soft-copper);
+            --accent-hover: #a04d2f;
+            
+            /* Typography */
+            --font-display: 'Anek Devanagari', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            
+            /* Spacing */
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --space-16: 4rem;
+            --space-20: 5rem;
+            
+            /* Transitions */
+            --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-medium: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Shadows */
+            --shadow-subtle: 0 2px 8px rgba(42, 42, 42, 0.08);
+            --shadow-medium: 0 4px 16px rgba(42, 42, 42, 0.12);
+            --shadow-strong: 0 8px 32px rgba(42, 42, 42, 0.16);
+            --shadow-copper: 0 4px 16px rgba(184, 92, 56, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.5;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* Container */
+        .booking-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--space-6);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .booking-header {
+            text-align: center;
+            margin-bottom: var(--space-12);
+        }
+
+        .header-badge {
+            display: inline-block;
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+            padding: var(--space-2) var(--space-5);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-4);
+        }
+
+        .header-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+        }
+
+        .header-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 500px;
+            margin: 0 auto var(--space-8);
+            line-height: 1.6;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background-color: var(--bg-primary);
+            border-radius: var(--space-6);
+            padding: var(--space-6);
+            margin-bottom: var(--space-12);
+            box-shadow: var(--shadow-subtle);
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            margin-bottom: var(--space-8);
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: rgba(42, 42, 42, 0.1);
+            z-index: 1;
+        }
+
+        .progress-fill {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--warm-copper) 0%, var(--soft-copper) 100%);
+            z-index: 2;
+            transition: width var(--transition-slow);
+            transform: translateY(-50%);
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+            z-index: 3;
+            position: relative;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(42, 42, 42, 0.2);
+            border-radius: 50%;
+            background-color: var(--bg-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: var(--text-muted);
+            transition: all var(--transition-medium);
+        }
+
+        .progress-step.active .step-circle {
+            border-color: var(--warm-copper);
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+        }
+
+        .progress-step.completed .step-circle {
+            border-color: var(--soft-copper);
+            background-color: var(--soft-copper);
+            color: var(--warm-white);
+        }
+
+        .step-label {
+            font-family: var(--font-display);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-align: center;
+            transition: color var(--transition-medium);
+        }
+
+        .progress-step.active .step-label,
+        .progress-step.completed .step-label {
+            color: var(--warm-copper);
+        }
+
+        /* Step Content */
+        .step-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Step 1: Event Tickets */
+        .event-showcase {
+            background: linear-gradient(135deg, var(--charcoal) 0%, #1f1f1f 100%);
+            border-radius: var(--space-8);
+            padding: var(--space-8);
+            margin-bottom: var(--space-8);
+            color: var(--text-inverse);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-showcase::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(184, 92, 56, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .showcase-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-8);
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .showcase-text {
+            text-align: center;
+        }
+
+        .showcase-badge {
+            display: inline-block;
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+            padding: var(--space-2) var(--space-4);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: var(--space-4);
+        }
+
+        .showcase-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: var(--space-4);
+        }
+
+        .showcase-description {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            color: rgba(254, 254, 254, 0.9);
+            margin-bottom: var(--space-6);
+        }
+
+        .showcase-highlights {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-6);
+            flex-wrap: wrap;
+        }
+
+        .highlight-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .highlight-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--warm-copper) 0%, var(--soft-copper) 100%);
+            border-radius: var(--space-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--warm-white);
+            font-size: 1.125rem;
+        }
+
+        .highlight-text {
+            font-size: 0.875rem;
+            text-align: center;
+            color: rgba(254, 254, 254, 0.8);
+        }
+
+        .showcase-visual {
+            height: 300px;
+            background: linear-gradient(135deg, var(--warm-copper) 0%, var(--soft-copper) 100%);
+            border-radius: var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .showcase-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="smoke" patternUnits="userSpaceOnUse" width="4" height="4"><circle cx="2" cy="2" r="0.5" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23smoke)"/></svg>');
+        }
+
+        .visual-content {
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .visual-icon {
+            font-size: 4rem;
+            color: var(--warm-white);
+            margin-bottom: var(--space-4);
+            opacity: 0.9;
+        }
+
+        .visual-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--warm-white);
+            margin-bottom: var(--space-2);
+        }
+
+        .visual-subtitle {
+            color: rgba(254, 254, 254, 0.8);
+        }
+
+        /* Ticket Selection */
+        .ticket-card {
+            background-color: var(--bg-primary);
+            border-radius: var(--space-6);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-subtle);
+            border: 3px solid var(--warm-copper);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ticket-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--warm-copper) 0%, var(--soft-copper) 100%);
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-6);
+        }
+
+        .ticket-badge {
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+            padding: var(--space-2) var(--space-4);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .ticket-price {
+            text-align: right;
+        }
+
+        .price-amount {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--warm-copper);
+            line-height: 1;
+        }
+
+        .price-per {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .ticket-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-4);
+        }
+
+        .ticket-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--space-6);
+        }
+
+        .ticket-quantity {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .quantity-label {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: var(--space-4);
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--warm-copper);
+            background-color: transparent;
+            border-radius: var(--space-2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--warm-copper);
+            cursor: pointer;
+            transition: all var(--transition-medium);
+        }
+
+        .quantity-btn:hover {
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+        }
+
+        .quantity-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quantity-display {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            min-width: 40px;
+            text-align: center;
+        }
+
+        .ticket-total {
+            background: rgba(184, 92, 56, 0.1);
+            border-radius: var(--space-4);
+            padding: var(--space-4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-label {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .total-amount {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--warm-copper);
+        }
+
+        /* Step 2: BBQ Packages */
+        .packages-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+
+        .package-card {
+            background-color: var(--bg-primary);
+            border-radius: var(--space-6);
+            padding: var(--space-6);
+            box-shadow: var(--shadow-subtle);
+            border: 2px solid transparent;
+            transition: all var(--transition-medium);
+            cursor: pointer;
+        }
+
+        .package-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-strong);
+            border-color: var(--warm-copper);
+        }
+
+        .package-card.selected {
+            border-color: var(--warm-copper);
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #faf9f7 100%);
+        }
+
+        .package-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-4);
+        }
+
+        .package-visual {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--warm-copper) 0%, var(--soft-copper) 100%);
+            border-radius: var(--space-4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--warm-white);
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .package-pricing {
+            text-align: right;
+        }
+
+        .package-price {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--warm-copper);
+            line-height: 1;
+        }
+
+        .package-per {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .package-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+        }
+
+        .package-description {
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: var(--space-4);
+        }
+
+        .package-features {
+            display: flex;
+            gap: var(--space-4);
+            margin-bottom: var(--space-4);
+            flex-wrap: wrap;
+        }
+
+        .feature-tag {
+            background: rgba(184, 92, 56, 0.1);
+            color: var(--warm-copper);
+            padding: var(--space-1) var(--space-3);
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .package-quantity {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Step 3: Review & Book */
+        .summary-container {
+            background-color: var(--bg-primary);
+            border-radius: var(--space-8);
+            padding: var(--space-8);
+            box-shadow: var(--shadow-subtle);
+            border: 1px solid rgba(184, 92, 56, 0.2);
+        }
+
+        .summary-header {
+            text-align: center;
+            margin-bottom: var(--space-8);
+        }
+
+        .summary-title {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-2);
+        }
+
+        .summary-subtitle {
+            color: var(--text-secondary);
+        }
+
+        .order-items {
+            margin-bottom: var(--space-8);
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-4) 0;
+            border-bottom: 1px solid rgba(42, 42, 42, 0.1);
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .item-name {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-1);
+        }
+
+        .item-description {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .item-quantity {
+            margin: 0 var(--space-4);
+            color: var(--text-muted);
+        }
+
+        .item-price {
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: var(--warm-copper);
+        }
+
+        .order-total {
+            background: linear-gradient(135deg, var(--cream) 0%, #f2efe9 100%);
+            border-radius: var(--space-4);
+            padding: var(--space-6);
+            margin-bottom: var(--space-8);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-2);
+        }
+
+        .total-row.final {
+            border-top: 2px solid var(--warm-copper);
+            padding-top: var(--space-4);
+            margin-top: var(--space-4);
+            margin-bottom: 0;
+        }
+
+        .total-label {
+            font-family: var(--font-display);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .total-label.final {
+            font-size: 1.25rem;
+        }
+
+        .total-value {
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: var(--warm-copper);
+        }
+
+        .total-value.final {
+            font-size: 2rem;
+        }
+
+        /* Navigation Buttons */
+        .step-navigation {
+            display: flex;
+            gap: var(--space-4);
+            justify-content: center;
+            margin-top: var(--space-8);
+        }
+
+        .nav-btn {
+            padding: var(--space-5) var(--space-8);
+            border: none;
+            border-radius: var(--space-4);
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all var(--transition-medium);
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .nav-btn.primary {
+            background: linear-gradient(135deg, var(--warm-copper) 0%, #d4654a 100%);
+            color: var(--warm-white);
+            box-shadow: var(--shadow-copper);
+        }
+
+        .nav-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(184, 92, 56, 0.3);
+        }
+
+        .nav-btn.secondary {
+            background-color: transparent;
+            color: var(--warm-copper);
+            border: 2px solid var(--warm-copper);
+        }
+
+        .nav-btn.secondary:hover {
+            background-color: var(--warm-copper);
+            color: var(--warm-white);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive */
+        @media (min-width: 768px) {
+            .showcase-content {
+                grid-template-columns: 1fr 1fr;
+                text-align: left;
+            }
+
+            .showcase-text {
+                text-align: left;
+            }
+
+            .packages-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+
+            .header-title {
+                font-size: 3rem;
+            }
+
+            .step-navigation {
+                justify-content: flex-end;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .booking-container {
+                padding: var(--space-8);
+            }
+
+            .packages-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="booking-container">
+        <!-- Header -->
+        <header class="booking-header">
+            <div class="header-badge">
+                <i class="fas fa-fire"></i>
+                Book Your Experience
+            </div>
+            <h1 class="header-title">Complete Your Booking</h1>
+            <p class="header-subtitle">
+                Secure your spot and optional take-home BBQ packages in just 3 simple steps.
+            </p>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 33.33%"></div>
+                
+                <div class="progress-step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <span class="step-label">Select Tickets</span>
+                </div>
+                
+                <div class="progress-step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <span class="step-label">Take-Home BBQ</span>
+                </div>
+                
+                <div class="progress-step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <span class="step-label">Review & Book</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: Select Tickets -->
+        <div class="step-content active" id="step1">
+            <div class="section-header" style="text-align: center; margin-bottom: 2rem;">
+                <h2 style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
+                    Choose Number of Attendees
+                </h2>
+                <p style="color: var(--text-secondary);">
+                    How many people will attend the Kansas City BBQ experience?
+                </p>
+            </div>
+
+            <!-- Ticket Selection -->
+            <div class="ticket-card">
+                <div class="ticket-header">
+                    <div class="ticket-badge">Event Entry</div>
+                    <div class="ticket-price">
+                        <div class="price-amount">$25</div>
+                        <div class="price-per">per person</div>
+                    </div>
+                </div>
+                
+                <h3 class="ticket-title">Kansas City BBQ Experience</h3>
+                <p class="ticket-description">
+                    Full Kansas City BBQ experience including burnt ends tasting, regional BBQ education, 
+                    exclusive store benefits, and priority access to take-home packages.
+                </p>
+                
+                <div class="ticket-quantity">
+                    <span class="quantity-label">Number of Attendees</span>
+                    <div class="quantity-control">
+                        <button class="quantity-btn" onclick="changeQuantity(-1)" id="decreaseBtn" disabled>
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="quantity-display" id="ticketQuantity">1</span>
+                        <button class="quantity-btn" onclick="changeQuantity(1)" id="increaseBtn">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="ticket-total">
+                    <span class="total-label">Ticket Total</span>
+                    <span class="total-amount" id="ticketTotal">$25</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Take-Home BBQ -->
+        <div class="step-content" id="step2">
+            <div class="section-header" style="text-align: center; margin-bottom: 3rem;">
+                <h2 style="font-family: var(--font-display); font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1rem;">
+                    Take-Home BBQ Packages
+                </h2>
+                <p style="color: var(--text-secondary); max-width: 600px; margin: 0 auto;">
+                    Exclusive Kansas City BBQ packages available only to event attendees. 
+                    Vacuum-sealed and ready for your freezer.
+                </p>
+            </div>
+
+            <div class="packages-grid">
+                <!-- Family Pack -->
+                <div class="package-card" onclick="selectPackage('family')" data-package="family">
+                    <div class="package-header">
+                        <div class="package-visual">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="package-pricing">
+                            <div class="package-price">$85</div>
+                            <div class="package-per">per pack</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="package-title">Kansas City BBQ Family Pack</h3>
+                    <p class="package-description">
+                        Feeds 4-6 people. Includes 2lbs of our signature Kansas City burnt ends with sides and sauce.
+                    </p>
+                    
+                    <div class="package-features">
+                        <span class="feature-tag">2lbs burnt ends</span>
+                        <span class="feature-tag">Serves 4-6</span>
+                        <span class="feature-tag">Sides included</span>
+                        <span class="feature-tag">KC sauce</span>
+                    </div>
+                    
+                    <div class="package-quantity">
+                        <span class="quantity-label">Quantity</span>
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="changePackageQuantity('family', -1)">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="quantity-display" id="familyQuantity">0</span>
+                            <button class="quantity-btn" onclick="changePackageQuantity('family', 1)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dinner Pack -->
+                <div class="package-card" onclick="selectPackage('dinner')" data-package="dinner">
+                    <div class="package-header">
+                        <div class="package-visual">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="package-pricing">
+                            <div class="package-price">$45</div>
+                            <div class="package-per">per pack</div>
+                        </div>
+                    </div>
+                    
+                    <h3 class="package-title">Kansas City BBQ Dinner Pack</h3>
+                    <p class="package-description">
+                        Perfect for 2 people. 1lb of premium burnt ends with traditional sides and sauce.
+                    </p>
+                    
+                    <div class="package-features">
+                        <span class="feature-tag">1lb burnt ends</span>
+                        <span class="feature-tag">Serves 2</span>
+                        <span class="feature-tag">Premium cuts</span>
+                        <span class="feature-tag">KC sauce</span>
+                    </div>
+                    
+                    <div class="package-quantity">
+                        <span class="quantity-label">Quantity</span>
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="changePackageQuantity('dinner', -1)">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="quantity-display" id="dinnerQuantity">0</span>
+                            <button class="quantity-btn" onclick="changePackageQuantity('dinner', 1)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Review & Book -->
+        <div class="step-content" id="step3">
+            <div class="summary-container">
+                <div class="summary-header">
+                    <h2 class="summary-title">Review Your Order</h2>
+                    <p class="summary-subtitle">Confirm your selection and secure your Kansas City BBQ experience</p>
+                </div>
+                
+                <div class="order-items" id="orderSummary">
+                    <!-- Order items will be populated by JavaScript -->
+                </div>
+                
+                <div class="order-total">
+                    <div class="total-row">
+                        <span class="total-label">Subtotal</span>
+                        <span class="total-value" id="subtotal">$25</span>
+                    </div>
+                    <div class="total-row">
+                        <span class="total-label">Event Savings</span>
+                        <span class="total-value" style="color: #27ae60;" id="savings">$0</span>
+                    </div>
+                    <div class="total-row final">
+                        <span class="total-label final">Total</span>
+                        <span class="total-value final" id="grandTotal">$25</span>
+                    </div>
+                </div>
+                
+                <div style="background: rgba(184, 92, 56, 0.1); border-radius: 12px; padding: 16px; margin-bottom: 32px; text-align: center;">
+                    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
+                        <i class="fas fa-shield-alt" style="color: var(--warm-copper);"></i>
+                        <span style="font-family: var(--font-display); font-weight: 600; color: var(--text-primary);">
+                            Free Cancellation
+                        </span>
+                    </div>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                        Cancel up to 24 hours before the event for a full refund
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="step-navigation">
+            <button class="nav-btn secondary" id="backBtn" onclick="previousStep()" style="display: none;">
+                <i class="fas fa-arrow-left"></i>
+                Back
+            </button>
+            <button class="nav-btn primary" id="nextBtn" onclick="nextStep()">
+                Continue
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        let selectedPackages = {
+            family: 0,
+            dinner: 0
+        };
+        let ticketQuantity = 1;
+
+        // Ticket quantity management
+        function changeQuantity(delta) {
+            const newQuantity = ticketQuantity + delta;
+            if (newQuantity >= 1 && newQuantity <= 10) {
+                ticketQuantity = newQuantity;
+                document.getElementById('ticketQuantity').textContent = ticketQuantity;
+                document.getElementById('ticketTotal').textContent = `$${ticketQuantity * 25}`;
+                
+                // Update button states
+                document.getElementById('decreaseBtn').disabled = ticketQuantity <= 1;
+                document.getElementById('increaseBtn').disabled = ticketQuantity >= 10;
+            }
+        }
+
+        // Package selection
+        function selectPackage(packageType) {
+            // Visual feedback for selection
+            document.querySelectorAll('.package-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+        }
+
+        function changePackageQuantity(packageType, delta) {
+            const newQuantity = selectedPackages[packageType] + delta;
+            if (newQuantity >= 0 && newQuantity <= 5) {
+                selectedPackages[packageType] = newQuantity;
+                document.getElementById(`${packageType}Quantity`).textContent = newQuantity;
+                
+                // Update card selection state
+                const card = document.querySelector(`[data-package="${packageType}"]`);
+                if (newQuantity > 0) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            }
+        }
+
+        // Navigation
+        function nextStep() {
+            if (currentStep < 3) {
+                currentStep++;
+                updateStepDisplay();
+                if (currentStep === 3) {
+                    updateOrderSummary();
+                }
+            } else {
+                // Proceed to checkout
+                proceedToCheckout();
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepDisplay();
+            }
+        }
+
+        function updateStepDisplay() {
+            // Hide all step content
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show current step content
+            document.getElementById(`step${currentStep}`).classList.add('active');
+            
+            // Update progress bar
+            const progressFill = document.getElementById('progressFill');
+            progressFill.style.width = `${(currentStep / 3) * 100}%`;
+            
+            // Update progress steps
+            document.querySelectorAll('.progress-step').forEach((step, index) => {
+                const stepNumber = index + 1;
+                step.classList.remove('active', 'completed');
+                
+                if (stepNumber < currentStep) {
+                    step.classList.add('completed');
+                    step.querySelector('.step-circle').innerHTML = '<i class="fas fa-check"></i>';
+                } else if (stepNumber === currentStep) {
+                    step.classList.add('active');
+                    step.querySelector('.step-circle').textContent = stepNumber;
+                } else {
+                    step.querySelector('.step-circle').textContent = stepNumber;
+                }
+            });
+            
+            // Update navigation buttons
+            const backBtn = document.getElementById('backBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            
+            backBtn.style.display = currentStep > 1 ? 'flex' : 'none';
+            
+            if (currentStep === 3) {
+                nextBtn.innerHTML = '<i class="fas fa-lock"></i> Secure Checkout';
+                nextBtn.classList.add('checkout-btn');
+            } else {
+                nextBtn.innerHTML = 'Continue <i class="fas fa-arrow-right"></i>';
+                nextBtn.classList.remove('checkout-btn');
+            }
+        }
+
+        function updateOrderSummary() {
+            const orderSummary = document.getElementById('orderSummary');
+            let subtotal = 0;
+            let savings = 0;
+            let html = '';
+            
+            // Add tickets
+            const ticketTotal = ticketQuantity * 25;
+            subtotal += ticketTotal;
+            html += `
+                <div class="order-item">
+                    <div class="item-details">
+                        <div class="item-name">Kansas City BBQ Experience</div>
+                        <div class="item-description">Event entry with tasting, education & benefits</div>
+                    </div>
+                    <div class="item-quantity">×${ticketQuantity}</div>
+                    <div class="item-price">$${ticketTotal}</div>
+                </div>
+            `;
+            
+            // Add packages
+            if (selectedPackages.family > 0) {
+                const familyTotal = selectedPackages.family * 85;
+                const familySavings = selectedPackages.family * 5; // $5 off each
+                subtotal += familyTotal;
+                savings += familySavings;
+                html += `
+                    <div class="order-item">
+                        <div class="item-details">
+                            <div class="item-name">KC BBQ Family Pack</div>
+                            <div class="item-description">2lbs burnt ends, serves 4-6 people</div>
+                        </div>
+                        <div class="item-quantity">×${selectedPackages.family}</div>
+                        <div class="item-price">$${familyTotal}</div>
+                    </div>
+                `;
+            }
+            
+            if (selectedPackages.dinner > 0) {
+                const dinnerTotal = selectedPackages.dinner * 45;
+                const dinnerSavings = selectedPackages.dinner * 3; // $3 off each
+                subtotal += dinnerTotal;
+                savings += dinnerSavings;
+                html += `
+                    <div class="order-item">
+                        <div class="item-details">
+                            <div class="item-name">KC BBQ Dinner Pack</div>
+                            <div class="item-description">1lb burnt ends, serves 2 people</div>
+                        </div>
+                        <div class="item-quantity">×${selectedPackages.dinner}</div>
+                        <div class="item-price">$${dinnerTotal}</div>
+                    </div>
+                `;
+            }
+            
+            orderSummary.innerHTML = html;
+            
+            // Update totals
+            document.getElementById('subtotal').textContent = `$${subtotal}`;
+            document.getElementById('savings').textContent = savings > 0 ? `-$${savings}` : '$0';
+            document.getElementById('grandTotal').textContent = `$${subtotal - savings}`;
+        }
+
+        function proceedToCheckout() {
+            // Add loading state
+            const nextBtn = document.getElementById('nextBtn');
+            const originalContent = nextBtn.innerHTML;
+            nextBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            nextBtn.disabled = true;
+            
+            // Simulate processing
+            setTimeout(() => {
+                alert('Proceeding to secure checkout...\n\nThis would redirect to the payment form.');
+                nextBtn.innerHTML = originalContent;
+                nextBtn.disabled = false;
+            }, 2000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStepDisplay();
+        });
+    </script>
+</body>
+</html>

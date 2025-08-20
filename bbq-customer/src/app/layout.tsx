@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
+import { Inter, Anek_Devanagari } from "next/font/google";
 import "./globals.css";
 import { Navigation } from "@/components/layout/Navigation";
 import { Footer } from "@/components/layout/Footer";
 import Script from "next/script";
+
+const inter = Inter({ 
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+const anekDevanagari = Anek_Devanagari({ 
+  subsets: ['latin'],
+  variable: '--font-anek-devanagari',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: "Yank DownUnder BBQ - Authentic American BBQ in Australia",
@@ -16,20 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${anekDevanagari.variable}`}>
       <head>
-        {/* Preload fonts for better performance */}
-        <link 
-          rel="preload" 
-          href="https://fonts.googleapis.com/css2?family=Anek+Devanagari:wght@400;500;600;700;800&display=swap" 
-          as="style"
-        />
-        <link 
-          rel="preload" 
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" 
-          as="style"
-        />
-        
         {/* Font Awesome for icons */}
         <link 
           rel="stylesheet" 

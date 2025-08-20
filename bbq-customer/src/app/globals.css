@@ -290,7 +290,7 @@ body {
   }
 
   .hero-container {
-    @apply max-w-screen-xl mx-auto px-4 grid grid-cols-1 gap-12 items-center;
+    @apply max-w-screen-xl mx-auto px-4;
   }
 
   .hero-content {
