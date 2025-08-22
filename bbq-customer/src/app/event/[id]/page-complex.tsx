@@ -90,7 +90,7 @@ export default function EventPage({ params }: EventPageProps) {
   }
   
   const formatPrice = (priceInCents: number) => {
-    return (priceInCents / 100).toFixed(0)
+    return priceInCents.toFixed(0)
   }
 
   return (

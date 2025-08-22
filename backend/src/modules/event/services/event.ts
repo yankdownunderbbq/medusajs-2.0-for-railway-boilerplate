@@ -277,8 +277,20 @@ export class EventService {
       }
     }
 
+    // ADD DEBUGGING HERE:
+    console.log('=== EventService UPDATE DEBUG ===')
+    console.log('Before update - event.content:', JSON.stringify(event.content))
+    console.log('Data being assigned:', JSON.stringify(data))
+    
     Object.assign(event, data)
+    
+    console.log('After Object.assign - event.content:', JSON.stringify(event.content))
+    console.log('Event object after assign:', JSON.stringify({ id: event.id, content: event.content }))
+    
     await this.manager.flush()
+    
+    console.log('After flush - event.content:', JSON.stringify(event.content))
+    console.log('=== END DEBUG ===')
 
     return event
   }

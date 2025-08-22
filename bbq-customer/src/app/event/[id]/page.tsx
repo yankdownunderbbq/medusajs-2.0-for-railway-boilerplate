@@ -35,27 +35,81 @@ export default function EventPage({ params }: EventPageProps) {
   // Fetch products when event is loaded
   useEffect(() => {
     async function fetchProducts() {
+      console.log('=== PRODUCT FETCH DEBUG ===')
+      console.log('Event:', event)
+      console.log('Product IDs:', event?.content?.productIds)
+      console.log('Backend URL:', process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL)
+      console.log('API Key exists:', !!process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY)
+      
+      console.log('Event content:', event?.content)
+      console.log('Content type:', typeof event?.content)
+      console.log('Content keys:', event?.content ? Object.keys(event.content) : 'No content')
+      
+      console.log('All event properties:', event ? Object.keys(event) : 'No event')
+      console.log('Looking for productIds in:', {
+        'event.productIds': event?.productIds,
+        'event.content': event?.content,
+        'event.products': event?.products,
+        'event.product_ids': event?.product_ids
+      })
+
       if (!event || !event.content?.productIds?.length) {
+        console.log('❌ No event or product IDs found')
         setProducts([])
         return
       }
 
+      console.log('✅ Starting product fetch for IDs:', event.content.productIds)
+
       try {
-        const productResponse = await fetch(
-          `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/products?id=${event.content.productIds.join(',')}`,
-          {
-            headers: {
-              'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || ''
+        // Map over product IDs and make individual API calls
+        const productPromises = event.content.productIds.map(async (productId: string) => {
+          try {
+            console.log(`🔄 Fetching product: ${productId}`)
+            const url = `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/products/${productId}?fields=*variants,*variants.prices`
+            console.log(`🌐 Request URL: ${url}`)
+            
+            const response = await fetch(url, {
+              headers: {
+                'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || ''
+              }
+            })
+            
+            console.log(`📡 Response status for ${productId}:`, response.status)
+            
+            if (!response.ok) {
+              console.warn(`❌ Failed to fetch product ${productId}: ${response.status} ${response.statusText}`)
+              return null
             }
+            
+            const productData = await response.json()
+            console.log(`✅ Product data for ${productId}:`, productData)
+            
+            console.log('PRICE DEBUG:', {
+              productTitle: productData.product.title,
+              variants: productData.product.variants.map(v => ({
+                id: v.id,
+                title: v.title,
+                prices: v.prices
+              }))
+            })
+            
+            return productData.product || null
+          } catch (error) {
+            console.warn(`❌ Error fetching product ${productId}:`, error)
+            return null
           }
-        )
-        const productData = await productResponse.json()
-        setProducts(productData.products || [])
+        })
+
+        // Wait for all requests to complete and filter out failed ones
+        const fetchedProducts = await Promise.all(productPromises)
+        const validProducts = fetchedProducts.filter(product => product !== null)
+        
+        setProducts(validProducts)
+        console.log('✅ Products fetched successfully:', validProducts.length)
       } catch (error) {
-        console.error('Error fetching products:', error)
+        console.error('❌ Product fetch error:', error)
         setProducts([])
-      } finally {
-        // Products loaded
       }
     }
 
@@ -136,7 +190,7 @@ export default function EventPage({ params }: EventPageProps) {
   }
   
   const formatPrice = (priceInCents: number) => {
-    return (priceInCents / 100).toFixed(0)
+    return priceInCents.toFixed(0)
   }
 
   return (
@@ -463,7 +517,7 @@ export default function EventPage({ params }: EventPageProps) {
         </div>
       </section>
 
-      <BookingFlowV2 event={event} products={products} />
+      <BookingFlowV2 eventId={params.id} event={event} products={products} />
 
 
       {/* Logistics Section */}

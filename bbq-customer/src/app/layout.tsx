@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Anek_Devanagari } from "next/font/google";
 import "./globals.css";
-import { Navigation } from "@/components/layout/Navigation";
-import { Footer } from "@/components/layout/Footer";
+import Navigation from "@/components/layout/Navigation";
+import Footer from "@/components/layout/Footer";
 import Script from "next/script";
 
 const inter = Inter({ 
@@ -44,22 +44,25 @@ export default function RootLayout({
         </main>
         <Footer />
         
-        {/* Smooth scrolling script */}
+        {/* Smooth scrolling script - only run once */}
         <Script id="smooth-scroll" strategy="afterInteractive">
           {`
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-              anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                  target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                  });
-                }
+            if (!window.smoothScrollInitialized) {
+              // Smooth scrolling for navigation links
+              document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                  e.preventDefault();
+                  const target = document.querySelector(this.getAttribute('href'));
+                  if (target) {
+                    target.scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'start'
+                    });
+                  }
+                });
               });
-            });
+              window.smoothScrollInitialized = true;
+            }
           `}
         </Script>
       </body>

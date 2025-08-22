@@ -79,7 +79,7 @@ export function BookingForm({ event, onSubmit, isSubmitting = false }: BookingFo
   }
 
   const formatPrice = (priceInCents: number) => {
-    return `$${(priceInCents / 100).toFixed(2)}`
+    return `$${priceInCents.toFixed(2)}`
   }
 
   return (

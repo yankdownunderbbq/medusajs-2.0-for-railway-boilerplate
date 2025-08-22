@@ -1,10 +1,11 @@
 'use client'
 
+import React from 'react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 
-export function Navigation() {
+function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const pathname = usePathname()
@@ -177,3 +178,5 @@ export function Navigation() {
     </nav>
   )
 }
+
+export default React.memo(Navigation)

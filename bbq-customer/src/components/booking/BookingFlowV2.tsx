@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createEventCart, redirectToCheckout, getDefaultRegion } from '@/utils/cart'
 
 const styles = `
 :root {
@@ -689,10 +690,108 @@ const styles = `
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* Event State UI */
+.event-loading-state,
+.event-error-state,
+.event-validation-error {
+    margin: var(--space-6) 0;
+    padding: var(--space-8);
+    border-radius: var(--space-4);
+    text-align: center;
+}
+
+.event-loading-state {
+    background: linear-gradient(135deg, var(--cream) 0%, #f0f0f0 100%);
+    border: 2px solid var(--soft-copper);
+}
+
+.event-error-state {
+    background: linear-gradient(135deg, #fee 0%, #fdd 100%);
+    border: 2px solid #e74c3c;
+}
+
+.event-validation-error {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border: 2px solid #f39c12;
+}
+
+.loading-content,
+.error-content,
+.validation-content {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.loading-spinner {
+    font-size: 2rem;
+    color: var(--warm-copper);
+    margin-bottom: var(--space-4);
+}
+
+.error-icon {
+    font-size: 2rem;
+    color: #e74c3c;
+    margin-bottom: var(--space-4);
+}
+
+.validation-icon {
+    font-size: 2rem;
+    color: #f39c12;
+    margin-bottom: var(--space-4);
+}
+
+.event-loading-state h3,
+.event-error-state h3,
+.event-validation-error h3 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--space-3);
+    color: var(--text-primary);
+}
+
+.event-loading-state p,
+.event-error-state p,
+.event-validation-error p {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-4);
+    line-height: 1.6;
+}
+
+.retry-btn {
+    background: linear-gradient(135deg, var(--warm-copper) 0%, #d4654a 100%);
+    color: var(--warm-white);
+    border: none;
+    padding: var(--space-4) var(--space-6);
+    border-radius: var(--space-3);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all var(--transition-medium);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    text-transform: uppercase;
+}
+
+.retry-btn:hover {
+    background: linear-gradient(135deg, #a04d2f 0%, #b8553f 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(184, 92, 56, 0.3);
+}
+
+.retry-btn:active {
+    transform: translateY(0);
+}
 `
 
 interface BookingFlowV2Props {
   bookingId?: string
+  eventId: string
   event: {
     id: string
     title: string
@@ -730,17 +829,39 @@ interface BookingFlowV2Props {
   }>
 }
 
-export default function BookingFlowV2({ event, products = [] }: BookingFlowV2Props) {
+export default function BookingFlowV2({ eventId, event, products = [] }: BookingFlowV2Props) {
   const [currentStep, setCurrentStep] = useState(1)
-  const [selectedPackages, setSelectedPackages] = useState<Record<string, number>>({
-    family: 0,
-    dinner: 0
-  })
+  const [selectedPackages, setSelectedPackages] = useState<Record<string, number>>({})
+  const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({})
   const [ticketQuantity, setTicketQuantity] = useState(1)
+  const [isCreatingCart, setIsCreatingCart] = useState(false)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
+  const [eventData, setEventData] = useState<any>(null)
+  const [isLoadingEvent, setIsLoadingEvent] = useState(false)
+  const [eventError, setEventError] = useState<string | null>(null)
+  const fetchEventData = async () => {
+    setIsLoadingEvent(true)
+    setEventError(null)
+    try {
+      const response = await fetch(`/api/events/${eventId}`)
+      const data = await response.json()
+      setEventData(data.event)
+    } catch (error) {
+      setEventError('Failed to load event data')
+    } finally {
+      setIsLoadingEvent(false)
+    }
+  }
 
   useEffect(() => {
     updateStepDisplay()
   }, [currentStep])
+
+  useEffect(() => {
+    if (eventId) {
+      fetchEventData()
+    }
+  }, [eventId])
 
   const changeQuantity = (delta: number) => {
     const newQuantity = ticketQuantity + delta
@@ -806,9 +927,9 @@ export default function BookingFlowV2({ event, products = [] }: BookingFlowV2Pro
         }
       }, 100)
     }
-  }
+  };
 
-  function updateStepDisplay() {
+  const updateStepDisplay = () => {
     // Update progress bar
     const progressFill = document.getElementById('progressFill')
     if (progressFill) {
@@ -839,47 +960,46 @@ export default function BookingFlowV2({ event, products = [] }: BookingFlowV2Pro
         }
       }
     })
-  }
+  };
 
-  function updateOrderSummary() {
+  const updateOrderSummary = () => {
     const orderSummary = document.getElementById('orderSummary')
-    let subtotal = 0
-    const savings = 0
+    let total = 0
     let html = ''
 
     // Add tickets
-    const ticketPrice = event.base_price / 100
+    const ticketPrice = event.base_price / 100 // ✅ FIXED: Backend returns cents, convert to dollars
     const ticketTotal = ticketQuantity * ticketPrice
-    subtotal += ticketTotal
+    total += ticketTotal
     html += `
       <div class="order-item">
+        <div class="item-quantity">×${ticketQuantity}</div>
         <div class="item-details">
           <div class="item-name">${event.title}</div>
-          <div class="item-description">${event.description || 'Event entry with tasting, education & benefits'}</div>
         </div>
-        <div class="item-quantity">×${ticketQuantity}</div>
-        <div class="item-price">$${ticketTotal.toFixed(2)}</div>
+        <div class="item-price">$${ticketPrice.toFixed(2)}</div>
       </div>
     `
 
     // Add products to summary
     products.forEach(product => {
-      const quantity = selectedPackages[product.id]
-      if (quantity > 0) {
-        const variant = product.variants?.[0]
-        const price = variant?.prices?.[0]
+      const selectedVariantId = selectedVariants[product.id] || product.variants?.[0]?.id
+      const selectedVariant = product.variants?.find(v => v.id === selectedVariantId)
+      const quantity = selectedPackages[selectedVariantId]
+      
+      if (quantity > 0 && selectedVariant) {
+        const price = selectedVariant?.prices?.[0]
         const priceAmount = price?.amount || 0
-        const productTotal = quantity * (priceAmount / 100)
-        subtotal += productTotal
+        const productTotal = quantity * (priceAmount / 100) // ✅ FIXED: Backend returns cents, convert to dollars
+        total += productTotal
         
         html += `
           <div class="order-item">
-            <div class="item-details">
-              <div class="item-name">${product.title}</div>
-              <div class="item-description">${product.description || 'Premium BBQ product'}</div>
-            </div>
             <div class="item-quantity">×${quantity}</div>
-            <div class="item-price">$${productTotal.toFixed(2)}</div>
+            <div class="item-details">
+              <div class="item-name">${product.title} - ${selectedVariant.title}</div>
+            </div>
+            <div class="item-price">$${(priceAmount / 100).toFixed(2)}</div>
           </div>
         `
       }
@@ -889,32 +1009,49 @@ export default function BookingFlowV2({ event, products = [] }: BookingFlowV2Pro
       orderSummary.innerHTML = html
     }
 
-    // Update totals
-    const subtotalEl = document.getElementById('subtotal')
-    const savingsEl = document.getElementById('savings')
+    // Update total - remove confusing subtotal/savings
     const grandTotalEl = document.getElementById('grandTotal')
+    if (grandTotalEl) grandTotalEl.textContent = `$${total.toFixed(2)}`
+  };
 
-    if (subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`
-    if (savingsEl) savingsEl.textContent = savings > 0 ? `-$${savings.toFixed(2)}` : '$0'
-    if (grandTotalEl) grandTotalEl.textContent = `$${(subtotal - savings).toFixed(2)}`
-  }
+  const handleSecureCheckout = async () => {
+    setIsCreatingCart(true)
+    setCheckoutError(null)
 
-  function proceedToCheckout() {
-    // Add loading state
-    const nextBtn = document.getElementById('nextBtn') as HTMLButtonElement
-    if (nextBtn) {
-      const originalContent = nextBtn.innerHTML
-      nextBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'
-      nextBtn.disabled = true
+    try {
+      // Validate ticket variant ID exists
+      if (!eventData?.ticket_variant_id) {
+        setCheckoutError('Event ticket variant not available')
+        return
+      }
 
-      // Simulate processing
-      setTimeout(() => {
-        alert('Proceeding to secure checkout...\n\nThis would redirect to the payment form.')
-        nextBtn.innerHTML = originalContent
-        nextBtn.disabled = false
-      }, 2000)
+      // Get default region
+      const regionId = await getDefaultRegion()
+      
+      // Create cart data with dynamic variant ID
+      const cartData = {
+        eventTicketVariantId: eventData.ticket_variant_id,
+        ticketQuantity,
+        selectedPackages,
+        regionId
+      }
+
+      // Create cart
+      const cartId = await createEventCart(cartData)
+      
+      // Redirect to checkout
+      redirectToCheckout(cartId)
+    } catch (error) {
+      setCheckoutError('Failed to create checkout. Please try again.')
+      console.error('Checkout error:', error)
+    } finally {
+      setIsCreatingCart(false)
     }
-  }
+  };
+
+  const proceedToCheckout = () => {
+    handleSecureCheckout()
+  };
 
   return (
     <>
@@ -932,6 +1069,46 @@ export default function BookingFlowV2({ event, products = [] }: BookingFlowV2Pro
           </p>
         </header>
 
+        {/* Event Loading State */}
+        {isLoadingEvent && (
+          <div className="event-loading-state">
+            <div className="loading-content">
+              <i className="fas fa-spinner fa-spin loading-spinner"></i>
+              <h3>Loading Event Details...</h3>
+              <p>Please wait while we fetch the latest event information.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Event Error State */}
+        {eventError && !isLoadingEvent && (
+          <div className="event-error-state">
+            <div className="error-content">
+              <i className="fas fa-exclamation-triangle error-icon"></i>
+              <h3>Unable to Load Event</h3>
+              <p>{eventError}</p>
+              <button onClick={fetchEventData} className="retry-btn">
+                <i className="fas fa-redo"></i>
+                Try Again
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Event Validation Error */}
+        {eventData && !eventData.ticket_variant_id && !isLoadingEvent && !eventError && (
+          <div className="event-validation-error">
+            <div className="validation-content">
+              <i className="fas fa-info-circle validation-icon"></i>
+              <h3>Event Configuration Issue</h3>
+              <p>This event doesn't have a ticket variant configured. Please contact support or try a different event.</p>
+            </div>
+          </div>
+        )}
+
+        {/* Main Booking Content - Only show when event data is ready */}
+        {!isLoadingEvent && !eventError && eventData && eventData.ticket_variant_id && (
+          <>
         {/* Progress Bar */}
         <div className="booking-progress-container" id="booking-top">
   <div className="booking-progress-bar">
@@ -1030,24 +1207,45 @@ export default function BookingFlowV2({ event, products = [] }: BookingFlowV2Pro
           {products && products.length > 0 ? (
             <div className="packages-grid">
               {products.map((product) => {
-                // Get the first variant and its price
-                const variant = product.variants?.[0]
-                const price = variant?.prices?.[0]
+                const selectedVariantId = selectedVariants[product.id] || product.variants?.[0]?.id
+                const selectedVariant = product.variants?.find(v => v.id === selectedVariantId) || product.variants?.[0]
+                const price = selectedVariant?.prices?.[0]
                 const priceAmount = price?.amount || 0
                 
+                console.log('PRICE CALC:', {
+                  productTitle: product.title,
+                  selectedVariantId,
+                  selectedVariant,
+                  priceAmount,
+                  displayPrice: (priceAmount / 100).toFixed(2)
+                })
+                
                 return (
-                  <div key={product.id} className="package-card" onClick={() => selectPackage()} data-package={product.id}>
-                    <div className="package-header">
-                      <div className="package-visual">
-                        {product.thumbnail ? (
-                          <img src={product.thumbnail} alt={product.title} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--space-4)' }} />
-                        ) : (
-                          <i className="fas fa-box"></i>
-                        )}
-                      </div>
-                      <div className="package-pricing">
-                        <div className="package-price">${(priceAmount / 100).toFixed(2)}</div>
-                        <div className="package-per">each</div>
+                  <div key={product.id} className="package-card" onClick={() => selectPackage()} data-package={selectedVariantId} style={{ overflow: 'hidden' }}>
+                    {/* Hero Image Section */}
+                    <div style={{
+                      position: 'relative',
+                      height: '200px',
+                      backgroundImage: `url(${product.thumbnail})`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center',
+                      marginBottom: 'var(--space-6)',
+                      margin: 'calc(var(--space-6) * -1) calc(var(--space-6) * -1) var(--space-6) calc(var(--space-6) * -1)'
+                    }}>
+                      {/* Price Badge */}
+                      <div style={{
+                        position: 'absolute',
+                        top: 'var(--space-4)',
+                        right: 'var(--space-4)',
+                        backgroundColor: 'var(--charcoal)',
+                        color: 'var(--warm-white)',
+                        padding: 'var(--space-2) var(--space-4)',
+                        borderRadius: '50px',
+                        fontFamily: 'var(--font-display)',
+                        fontSize: '0.875rem',
+                        fontWeight: 600
+                      }}>
+                        ${(priceAmount / 100).toFixed(2)}
                       </div>
                     </div>
 
@@ -1056,20 +1254,70 @@ export default function BookingFlowV2({ event, products = [] }: BookingFlowV2Pro
                       {product.description || 'Premium BBQ product for take-home.'}
                     </p>
 
+                    {product.variants && product.variants.length > 1 && (
+                      <div style={{ marginBottom: 'var(--space-4)' }}>
+                        <label style={{ 
+                          fontFamily: 'var(--font-display)', 
+                          fontWeight: 600, 
+                          color: 'var(--text-primary)', 
+                          marginBottom: 'var(--space-2)', 
+                          display: 'block' 
+                        }}>
+                          Size:
+                        </label>
+                        <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
+                          {product.variants.map((variant) => (
+                            <button
+                              key={variant.id}
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                setSelectedVariants(prev => ({
+                                  ...prev,
+                                  [product.id]: variant.id
+                                }))
+                              }}
+                              style={{
+                                padding: 'var(--space-2) var(--space-4)',
+                                border: `2px solid ${selectedVariantId === variant.id ? 'var(--warm-copper)' : '#e5e5e5'}`,
+                                backgroundColor: selectedVariantId === variant.id ? 'var(--warm-copper)' : 'transparent',
+                                color: selectedVariantId === variant.id ? 'var(--warm-white)' : 'var(--text-primary)',
+                                borderRadius: 'var(--space-2)',
+                                cursor: 'pointer',
+                                fontFamily: 'var(--font-display)',
+                                fontWeight: 600,
+                                fontSize: '0.875rem',
+                                transition: 'all var(--transition-medium)'
+                              }}
+                            >
+                              {variant.title}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     <div className="package-features">
                       <span className="feature-tag">Premium quality</span>
                       <span className="feature-tag">Take-home</span>
-                      {variant && <span className="feature-tag">{variant.title}</span>}
+                      {selectedVariant && <span className="feature-tag">{selectedVariant.title}</span>}
                     </div>
 
                     <div className="package-quantity">
                       <span className="quantity-label">Quantity</span>
                       <div className="quantity-control">
-                        <button className="quantity-btn" onClick={() => changePackageQuantity(product.id, -1)}>
+                        <button 
+                          className="quantity-btn" 
+                          onClick={() => changePackageQuantity(selectedVariantId, -1)}
+                        >
                           <i className="fas fa-minus"></i>
                         </button>
-                        <span className="quantity-display">{selectedPackages[product.id] || 0}</span>
-                        <button className="quantity-btn" onClick={() => changePackageQuantity(product.id, 1)}>
+                        <span className="quantity-display">
+                          {selectedPackages[selectedVariantId] || 0}
+                        </span>
+                        <button 
+                          className="quantity-btn" 
+                          onClick={() => changePackageQuantity(selectedVariantId, 1)}
+                        >
                           <i className="fas fa-plus"></i>
                         </button>
                       </div>
@@ -1104,22 +1352,17 @@ export default function BookingFlowV2({ event, products = [] }: BookingFlowV2Pro
             </div>
 
             <div className="order-total">
-              <div className="total-row">
-                <span className="total-label">Subtotal</span>
-                {/* Mobile fix: add proper spacing between label and value */}
-                <span className="total-value" id="subtotal">${(ticketQuantity * (event.base_price / 100)).toFixed(2)}</span>
-              </div>
-              <div className="total-row">
-                <span className="total-label">Event Savings</span>
-                {/* Mobile fix: add proper spacing between label and value */}
-                <span className="total-value" style={{ color: '#27ae60' }} id="savings">$0</span>
-              </div>
               <div className="total-row final">
                 <span className="total-label final">Total</span>
-                {/* Mobile fix: add proper spacing between label and value */}
                 <span className="total-value final" id="grandTotal">${(ticketQuantity * (event.base_price / 100)).toFixed(2)}</span>
               </div>
             </div>
+
+            {checkoutError && (
+              <div style={{ background: 'rgba(158, 33, 70, 0.1)', borderRadius: '12px', padding: '16px', marginBottom: '16px', textAlign: 'center' }}>
+                <span style={{ color: '#9e2146', fontSize: '0.875rem' }}>{checkoutError}</span>
+              </div>
+            )}
 
             <div style={{ background: 'rgba(184, 92, 56, 0.1)', borderRadius: '12px', padding: '16px', marginBottom: '32px', textAlign: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
@@ -1146,11 +1389,17 @@ export default function BookingFlowV2({ event, products = [] }: BookingFlowV2Pro
             <i className="fas fa-arrow-left"></i>
             Back
           </button>
-          <button className="nav-btn primary" id="nextBtn" onClick={nextStep}>
+          <button className="nav-btn primary" id="nextBtn" onClick={nextStep} disabled={isCreatingCart || (currentStep === 3 && !eventData?.ticket_variant_id)}>
             {currentStep === 3 ? (
-              <>
-                <i className="fas fa-lock"></i> Secure Checkout
-              </>
+              isCreatingCart ? (
+                <>
+                  <i className="fas fa-spinner fa-spin"></i> Creating Cart...
+                </>
+              ) : (
+                <>
+                  <i className="fas fa-lock"></i> Secure Checkout
+                </>
+              )
             ) : (
               <>
                 Continue
@@ -1159,6 +1408,8 @@ export default function BookingFlowV2({ event, products = [] }: BookingFlowV2Pro
             )}
           </button>
         </div>
+        </>
+        )}
       </div>
     </>
   )

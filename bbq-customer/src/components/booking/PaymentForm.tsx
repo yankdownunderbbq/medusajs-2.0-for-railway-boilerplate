@@ -27,7 +27,7 @@ function StripePaymentForm({ bookingId, amount, onPaymentSuccess, onPaymentError
   const [name, setName] = useState('')
 
   const formatPrice = (priceInCents: number) => {
-    return `$${(priceInCents / 100).toFixed(2)}`
+    return `$${priceInCents.toFixed(2)}`
   }
 
   useEffect(() => {

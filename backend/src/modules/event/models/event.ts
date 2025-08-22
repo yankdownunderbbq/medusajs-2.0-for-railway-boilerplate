@@ -2,6 +2,7 @@ import { Entity, PrimaryKey, Property, BeforeCreate, BeforeUpdate, Index } from 
 import { generateEntityId } from "@medusajs/utils"
 
 export interface EventContent {
+  productIds?: string[]
   packages?: Array<{
     id: string
     name: string
@@ -133,6 +134,9 @@ export class Event {
 
   @Property({ columnType: "varchar", length: 255, nullable: true })
   slug?: string
+
+  @Property({ columnType: "varchar", length: 255, nullable: true })
+  ticket_variant_id?: string
 
   @Property({ columnType: "jsonb", nullable: true })
   metadata?: Record<string, any>

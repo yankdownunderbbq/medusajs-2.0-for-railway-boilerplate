@@ -11,14 +11,17 @@
   "dependencies": {
     "@headlessui/react": "^2.2.7",
     "@medusajs/js-sdk": "^2.9.0",
+    "@medusajs/types": "^2.9.0",
     "@stripe/react-stripe-js": "^3.9.1",
     "@stripe/stripe-js": "^7.8.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.12",
+    "lucide-react": "^0.540.0",
     "next": "14.2.32",
     "qrcode": "^1.5.4",
     "react": "^18",
     "react-dom": "^18",
+    "stripe": "^18.4.0",
     "zustand": "^5.0.7"
   },
   "devDependencies": {

@@ -49,7 +49,7 @@ export default function BookingConfirmationPage() {
   }
 
   const formatPrice = (priceInCents: number) => {
-    return `$${(priceInCents / 100).toFixed(2)}`
+    return `$${priceInCents.toFixed(2)}`
   }
 
   const getPackageName = (packageType: string) => {

@@ -2,6 +2,7 @@ import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 
 const UpdateContentSchema = z.object({
+  productIds: z.array(z.string()).optional(),
   packages: z.array(z.object({
     id: z.string(),
     name: z.string(),

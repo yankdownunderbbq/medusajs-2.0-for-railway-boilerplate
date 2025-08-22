@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { MedusaRequest, MedusaResponse } from "@medusajs/framework";
 import Stripe from 'stripe'
 
 // Initialize Stripe with your secret key
@@ -8,15 +8,22 @@ const stripe = new Stripe(process.env.STRIPE_API_KEY!, {
 
 export const AUTHENTICATE = false
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: MedusaRequest,
+  res: MedusaResponse
+): Promise<void> {
   try {
-    const { amount, booking_id, customer_email } = await req.json()
+    const { amount, booking_id, customer_email } = req.body as {
+      amount?: number
+      booking_id?: string
+      customer_email?: string
+    }
 
     if (!amount || !booking_id) {
-      return NextResponse.json(
-        { error: 'Missing required fields: amount and booking_id' },
-        { status: 400 }
-      )
+      res.status(400).json({
+        error: 'Missing required fields: amount and booking_id'
+      })
+      return
     }
 
     // Create a payment intent
@@ -32,16 +39,15 @@ export async function POST(req: NextRequest) {
       }
     })
 
-    return NextResponse.json({
+    res.json({
       client_secret: paymentIntent.client_secret,
       payment_intent_id: paymentIntent.id
     })
 
   } catch (error) {
     console.error('Payment intent creation failed:', error)
-    return NextResponse.json(
-      { error: 'Failed to create payment intent' },
-      { status: 500 }
-    )
+    res.status(500).json({
+      error: 'Failed to create payment intent'
+    })
   }
 }

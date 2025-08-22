@@ -125,7 +125,7 @@ export default function PaymentPage() {
             <div className="summary-total">
               <div className="total-row">
                 <span>Total Amount:</span>
-                <span>${(bookingData.total_amount / 100).toFixed(2)}</span>
+                <span>${bookingData.total_amount.toFixed(2)}</span>
               </div>
             </div>
 

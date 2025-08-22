@@ -23,9 +23,9 @@
   "dependencies": {
     "@medusajs/admin-sdk": "2.8.8",
     "@medusajs/cli": "2.8.8",
+    "@medusajs/dashboard": "2.8.8",
     "@medusajs/framework": "2.8.8",
     "@medusajs/medusa": "2.8.8",
-    "@medusajs/dashboard": "2.8.8",
     "@medusajs/notification-sendgrid": "2.8.8",
     "@medusajs/payment-stripe": "2.8.8",
     "@medusajs/workflow-engine-redis": "2.8.8",
@@ -40,6 +40,7 @@
     "minio": "^8.0.3",
     "pg": "^8.13.1",
     "resend": "4.0.1",
+    "stripe": "^18.4.0",
     "ulid": "^2.3.0"
   },
   "devDependencies": {
