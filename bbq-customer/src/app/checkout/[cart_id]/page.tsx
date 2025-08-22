@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { loadStripe } from '@stripe/stripe-js'
@@ -14,6 +14,65 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 const MEDUSA_API_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "http://localhost:9000"
 const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY!
 const PICKUP_SHIPPING_OPTION_ID = "so_01K37V2NKQE09P3T3MPM7T55BP" // Verified "Pickup Only" option
+
+// Extracted InputField component to prevent cursor jumping
+const InputField = React.memo(({ 
+  label, 
+  name, 
+  type = 'text', 
+  placeholder, 
+  icon: Icon, 
+  error, 
+  required = false,
+  value,
+  onChange,
+  ...props 
+}: {
+  label: string
+  name: string
+  type?: string
+  placeholder?: string
+  icon?: any
+  error?: string
+  required?: boolean
+  value: string
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  [key: string]: any
+}) => (
+  <div className="space-y-1">
+    <label className="block text-sm font-medium text-gray-700">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
+    <div className="relative">
+      {Icon && (
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <Icon className="h-4 w-4 text-gray-400" />
+        </div>
+      )}
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className={`w-full ${Icon ? 'pl-10' : 'pl-3'} pr-3 py-2.5 border rounded-lg text-sm
+          ${error 
+            ? 'border-red-300 focus:border-red-500 focus:ring-red-500' 
+            : 'border-gray-300 focus:border-orange-500 focus:ring-orange-500'
+          }
+          focus:outline-none focus:ring-2 focus:ring-opacity-20 transition-colors
+          placeholder-gray-400`}
+        {...props}
+      />
+    </div>
+    {error && (
+      <div className="flex items-center space-x-1 text-red-600 text-xs">
+        <AlertCircle className="h-3 w-3" />
+        <span>{error}</span>
+      </div>
+    )}
+  </div>
+))
 
 export default function CheckoutPage() {
   const params = useParams()
@@ -104,7 +163,7 @@ export default function CheckoutPage() {
     }
   }, [cartId]) // Only run when cartId changes
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
@@ -121,7 +180,7 @@ export default function CheckoutPage() {
     
     // Check if form is complete
     checkFormCompletion({...formData, [name]: value})
-  }
+  }, [errors, formData])
 
   const checkFormCompletion = (data: any) => {
     const required = ['email', 'firstName', 'lastName', 'address', 'city', 'state', 'zipCode']
@@ -290,60 +349,6 @@ export default function CheckoutPage() {
     setShowPayment(true)
   }
 
-  // Reusable Input Field Component
-  const InputField = ({ 
-    label, 
-    name, 
-    type = 'text', 
-    placeholder, 
-    icon: Icon, 
-    error, 
-    required = false,
-    ...props 
-  }: {
-    label: string
-    name: string
-    type?: string
-    placeholder?: string
-    icon?: any
-    error?: string
-    required?: boolean
-    [key: string]: any
-  }) => (
-    <div className="space-y-1">
-      <label className="block text-sm font-medium text-gray-700">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      <div className="relative">
-        {Icon && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Icon className="h-4 w-4 text-gray-400" />
-          </div>
-        )}
-        <input
-          type={type}
-          name={name}
-          value={formData[name as keyof typeof formData] || ''}
-          onChange={handleInputChange}
-          placeholder={placeholder}
-          className={`w-full ${Icon ? 'pl-10' : 'pl-3'} pr-3 py-2.5 border rounded-lg text-sm
-            ${error 
-              ? 'border-red-300 focus:border-red-500 focus:ring-red-500' 
-              : 'border-gray-300 focus:border-orange-500 focus:ring-orange-500'
-            }
-            focus:outline-none focus:ring-2 focus:ring-opacity-20 transition-colors
-            placeholder-gray-400`}
-          {...props}
-        />
-      </div>
-      {error && (
-        <div className="flex items-center space-x-1 text-red-600 text-xs">
-          <AlertCircle className="h-3 w-3" />
-          <span>{error}</span>
-        </div>
-      )}
-    </div>
-  )
 
   if (loading) return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -422,6 +427,8 @@ export default function CheckoutPage() {
                   icon={Mail}
                   error={errors.email}
                   required
+                  value={formData.email || ''}
+                  onChange={handleInputChange}
                 />
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -431,6 +438,8 @@ export default function CheckoutPage() {
                     placeholder="John"
                     error={errors.firstName}
                     required
+                    value={formData.firstName || ''}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="Last Name"
@@ -438,6 +447,8 @@ export default function CheckoutPage() {
                     placeholder="Doe"
                     error={errors.lastName}
                     required
+                    value={formData.lastName || ''}
+                    onChange={handleInputChange}
                   />
                 </div>
                 
@@ -448,6 +459,8 @@ export default function CheckoutPage() {
                   placeholder="+61 400 000 000"
                   icon={Phone}
                   error={errors.phone}
+                  value={formData.phone || ''}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -466,6 +479,8 @@ export default function CheckoutPage() {
                   placeholder="123 Main Street"
                   error={errors.address}
                   required
+                  value={formData.address || ''}
+                  onChange={handleInputChange}
                 />
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -475,6 +490,8 @@ export default function CheckoutPage() {
                     placeholder="Brisbane"
                     error={errors.city}
                     required
+                    value={formData.city || ''}
+                    onChange={handleInputChange}
                   />
                   <InputField
                     label="State/Province"
@@ -482,6 +499,8 @@ export default function CheckoutPage() {
                     placeholder="QLD"
                     error={errors.state}
                     required
+                    value={formData.state || ''}
+                    onChange={handleInputChange}
                   />
                 </div>
                 
@@ -492,6 +511,8 @@ export default function CheckoutPage() {
                     placeholder="4000"
                     error={errors.zipCode}
                     required
+                    value={formData.zipCode || ''}
+                    onChange={handleInputChange}
                   />
                   <div className="space-y-1">
                     <label className="block text-sm font-medium text-gray-700">
