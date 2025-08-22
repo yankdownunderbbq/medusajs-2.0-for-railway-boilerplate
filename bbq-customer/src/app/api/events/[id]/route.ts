@@ -16,17 +16,6 @@ export async function GET(
   try {
     const backendUrl = `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/bbq-events/${eventId}`
     
-    console.log('=== REQUEST DEBUG ===')
-    console.log('URL:', backendUrl)
-    console.log('Headers being sent:', {
-      'Content-Type': 'application/json',
-      'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
-    })
-    console.log('Request method: GET')
-    console.log('Environment variables:')
-    console.log('- NEXT_PUBLIC_MEDUSA_BACKEND_URL:', process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL)
-    console.log('- NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY:', process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY)
-    
     // Connect to Medusa backend using the same pattern as useBBQEvents
     const response = await fetch(backendUrl, {
         headers: {
@@ -36,9 +25,6 @@ export async function GET(
       }
     )
     
-    console.log('=== RESPONSE DEBUG ===')
-    console.log('Response status:', response.status)
-    console.log('Response headers:', Object.fromEntries(response.headers.entries()))
 
     if (!response.ok) {
       return NextResponse.json(
@@ -48,24 +34,6 @@ export async function GET(
     }
 
     const data = await response.json()
-    console.log('Raw backend response:', JSON.stringify(data, null, 2))
-    
-    // Detailed response analysis
-    console.log('=== BACKEND RESPONSE ANALYSIS ===')
-    console.log('Response data type:', typeof data)
-    console.log('Has event property:', 'event' in data)
-    console.log('Event object exists:', !!data.event)
-    console.log('Event object type:', typeof data.event)
-    
-    if (data.event) {
-      console.log('Event object keys:', Object.keys(data.event))
-      console.log('ticket_variant_id value:', data.event.ticket_variant_id)
-      console.log('ticket_variant_id type:', typeof data.event.ticket_variant_id)
-      console.log('ticket_variant_id === null:', data.event.ticket_variant_id === null)
-      console.log('ticket_variant_id === undefined:', data.event.ticket_variant_id === undefined)
-      console.log('ticket_variant_id === "":', data.event.ticket_variant_id === "")
-      console.log('Has ticket_variant_id property:', 'ticket_variant_id' in data.event)
-    }
     
     // Explicit field mapping to ensure ticket_variant_id is included
     const eventResponse = {
@@ -105,9 +73,6 @@ export async function GET(
       menu_description: data.event.menu_description
     }
 
-    // Before returning, add:
-    console.log('=== DEBUG: What we are returning ===') 
-    console.log('Final event object:', JSON.stringify(eventResponse, null, 2))
 
     // =========================================================================
     // TEMPORARY WORKAROUND FOR BACKEND INCONSISTENCY
@@ -131,15 +96,6 @@ export async function GET(
       ticket_variant_id: data.event?.ticket_variant_id || 'variant_01K357VQ7Y8JSNDS05PD2J20QM'
     }
     
-    console.log('=== FINAL FRONTEND RESPONSE ===')
-    console.log('Original ticket_variant_id:', data.event?.ticket_variant_id)
-    console.log('Using fallback?', !data.event?.ticket_variant_id)
-    console.log('Final ticket_variant_id:', eventWithVariantId.ticket_variant_id)
-    
-    console.log('=== CURL COMPARISON ===')
-    console.log('To compare with working curl, run this command:')
-    console.log(`curl -H "Content-Type: application/json" -H "x-publishable-api-key: ${process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}" "${backendUrl}"`)
-    console.log('Compare the ticket_variant_id value in both responses!')
     
     return NextResponse.json({
       event: eventWithVariantId

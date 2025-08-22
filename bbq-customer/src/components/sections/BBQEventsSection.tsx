@@ -55,7 +55,7 @@ export function BBQEventsSection() {
   }
 
   const formatPrice = (priceInCents: number) => {
-    return priceInCents.toFixed(0)
+    return (priceInCents / 100).toFixed(2)
   }
 
   const formatEventDate = (dateString: string) => {

@@ -122,13 +122,8 @@ function CheckoutPage() {
 
   // Create payment intent once per cart
   useEffect(() => {
-    console.log('🚨 PAYMENT INTENT EFFECT: dependencies changed', { 
-      cartId,
-      clientSecret: clientSecret ? 'present' : 'null'
-    })
     
     if (cartId && !clientSecret && cart && cart.total > 0) {
-      console.log('🚨 CALLING inline createPaymentIntent()')
       
       // Inline payment intent creation to avoid dependency issues
       const createIntent = async () => {
@@ -147,21 +142,17 @@ function CheckoutPage() {
 
           if (!response.ok) {
             const errorData = await response.json()
-            console.log('🚨 API Error:', response.status, errorData)
             setError(`Payment initialization failed: ${errorData.error || 'Unknown error'}`)
             return
           }
 
           const data = await response.json()
           if (data.client_secret) {
-            console.log('🚨 SETTING clientSecret')
             setClientSecret(data.client_secret)
           } else {
-            console.log('🚨 SETTING error - Failed to initialize payment')
             setError('Failed to initialize payment')
           }
         } catch (error) {
-          console.log('🚨 SETTING error - Exception in createPaymentIntent')
           setError('Failed to initialize payment')
         }
       }
@@ -194,12 +185,9 @@ const cardElementOptions = {
 // Isolated CardInput component to prevent re-rendering when other form fields change
 const CardInput = memo(function CardInput() {
   useEffect(() => {
-    console.log('🔵 CardInput component mounted')
-    return () => console.log('🔴 CardInput component unmounted')
   }, [])
 
   useEffect(() => {
-    console.log('🟡 CardInput component re-rendered')
   })
 
   return (
@@ -208,8 +196,8 @@ const CardInput = memo(function CardInput() {
       <div className="border border-gray-300 rounded-md p-3 bg-white">
         <CardElement 
           options={cardElementOptions}
-          onReady={() => console.log('🟢 CardElement ready')}
-          onChange={(event) => console.log('🔄 CardElement changed:', event.complete ? 'Complete' : 'Incomplete')}
+          onReady={() => {}}
+          onChange={() => {}}
         />
       </div>
     </div>
@@ -254,12 +242,9 @@ const StripePaymentForm = memo(function StripePaymentForm({
   const elements = useElements()
 
   useEffect(() => {
-    console.log('🔵 StripePaymentForm mounted')
-    return () => console.log('🔴 StripePaymentForm unmounted')
   }, [])
 
   useEffect(() => {
-    console.log('🟡 StripePaymentForm re-rendered with clientSecret:', clientSecret ? 'present' : 'missing')
   })
 
   // Show loading state if clientSecret or cart is not ready

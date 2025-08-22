@@ -65,9 +65,7 @@ export default function EventPage({ params }: EventPageProps) {
         // Map over product IDs and make individual API calls
         const productPromises = event.content.productIds.map(async (productId: string) => {
           try {
-            console.log(`🔄 Fetching product: ${productId}`)
             const url = `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/products/${productId}?fields=*variants,*variants.prices`
-            console.log(`🌐 Request URL: ${url}`)
             
             const response = await fetch(url, {
               headers: {
@@ -75,24 +73,12 @@ export default function EventPage({ params }: EventPageProps) {
               }
             })
             
-            console.log(`📡 Response status for ${productId}:`, response.status)
             
             if (!response.ok) {
-              console.warn(`❌ Failed to fetch product ${productId}: ${response.status} ${response.statusText}`)
               return null
             }
             
             const productData = await response.json()
-            console.log(`✅ Product data for ${productId}:`, productData)
-            
-            console.log('PRICE DEBUG:', {
-              productTitle: productData.product.title,
-              variants: productData.product.variants.map(v => ({
-                id: v.id,
-                title: v.title,
-                prices: v.prices
-              }))
-            })
             
             return productData.product || null
           } catch (error) {
@@ -106,7 +92,6 @@ export default function EventPage({ params }: EventPageProps) {
         const validProducts = fetchedProducts.filter(product => product !== null)
         
         setProducts(validProducts)
-        console.log('✅ Products fetched successfully:', validProducts.length)
       } catch (error) {
         console.error('❌ Product fetch error:', error)
         setProducts([])
@@ -190,7 +175,7 @@ export default function EventPage({ params }: EventPageProps) {
   }
   
   const formatPrice = (priceInCents: number) => {
-    return priceInCents.toFixed(0)
+    return (priceInCents / 100).toFixed(2)
   }
 
   return (
@@ -240,7 +225,7 @@ export default function EventPage({ params }: EventPageProps) {
 
               <div className="event-stats">
                 <div className="stat">
-                  <span className="stat-number">${formatPrice(event.base_price)}</span>
+                  <span className="stat-number">${(event.base_price / 100).toFixed(2)}</span>
                   <span className="stat-label">Starting Price</span>
                 </div>
                 <div className="stat">
@@ -259,7 +244,7 @@ export default function EventPage({ params }: EventPageProps) {
 
               <div className="hero-cta-section">
                 <p className="cta-price">
-                  Experience authentic {event.bbq_region} BBQ from ${formatPrice(event.base_price)}
+                  Experience authentic {event.bbq_region} BBQ from ${(event.base_price / 100).toFixed(2)}
                 </p>
                 {!isEventFull && (
                   <Link href={`/book/${event.id}`} className="hero-cta">
@@ -389,7 +374,7 @@ export default function EventPage({ params }: EventPageProps) {
       <section className="whats-included">
         <div className="included-container">
           <div className="section-header">
-            <span className="section-badge">Your ${formatPrice(event.base_price)} Gets You</span>
+            <span className="section-badge">Your ${(event.base_price / 100).toFixed(2)} Gets You</span>
             <h2 className="section-title">What's Included In Your {event.bbq_region} Experience</h2>
             <p className="section-subtitle">
               More than just a tasting - it's your gateway to authentic {event.bbq_region} BBQ culture
@@ -413,7 +398,7 @@ export default function EventPage({ params }: EventPageProps) {
               </ul>
               <div className="card-value">
                 <span className="value-label">Standalone Value:</span>
-                <span className="value-amount">${formatPrice(event.base_price) + 10}</span>
+                <span className="value-amount">A${(event.base_price / 100 + 10).toFixed(2)}</span>
               </div>
             </div>
 
@@ -473,7 +458,7 @@ export default function EventPage({ params }: EventPageProps) {
               <div className="summary-math">
                 <div className="math-line">
                   <span className="math-item">{event.bbq_region} BBQ Tasting</span>
-                  <span className="math-value">${parseInt(formatPrice(event.base_price)) + 10}</span>
+                  <span className="math-value">A${(event.base_price / 100 + 10).toFixed(2)}</span>
                 </div>
                 <div className="math-line">
                   <span className="math-item">Store Benefits</span>
@@ -486,7 +471,7 @@ export default function EventPage({ params }: EventPageProps) {
                 <div className="math-divider"></div>
                 <div className="math-line total">
                   <span className="math-item">Your Price</span>
-                  <span className="math-value">${formatPrice(event.base_price)}</span>
+                  <span className="math-value">${(event.base_price / 100).toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -668,7 +653,7 @@ export default function EventPage({ params }: EventPageProps) {
 
           <div className="faq-grid">
             <div className="faq-item">
-              <h3 className="faq-question">What's included in the ${formatPrice(event.base_price)} entry fee?</h3>
+              <h3 className="faq-question">What's included in the ${(event.base_price / 100).toFixed(2)} entry fee?</h3>
               <p className="faq-answer">
                 Your ticket includes a generous portion of authentic {event.bbq_region} BBQ, traditional sides, 
                 regional sauces, BBQ education session, 15% store discount, and exclusive access to pre-order packages.

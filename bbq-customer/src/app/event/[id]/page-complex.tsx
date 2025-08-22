@@ -140,7 +140,7 @@ export default function EventPage({ params }: EventPageProps) {
 
               <div className="event-stats">
                 <div className="stat">
-                  <span className="stat-number">${formatPrice(event.base_price)}</span>
+                  <span className="stat-number">{formatPrice(event.base_price)}</span>
                   <span className="stat-label">Starting Price</span>
                 </div>
                 <div className="stat">
@@ -159,7 +159,7 @@ export default function EventPage({ params }: EventPageProps) {
 
               <div className="hero-cta-section">
                 <p className="cta-price">
-                  Experience authentic {event.bbq_region} BBQ from ${formatPrice(event.base_price)}
+                  Experience authentic {event.bbq_region} BBQ from {formatPrice(event.base_price)}
                 </p>
                 {!isEventFull && (
                   <Link href={`/book/${event.id}`} className="hero-cta">

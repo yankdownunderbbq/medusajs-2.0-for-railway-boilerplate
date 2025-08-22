@@ -20,20 +20,15 @@ export const GET = async (
 
     let event
     
-    console.log(`=== BACKEND DEBUG ===`)
-    console.log(`Request ID: ${id}`)
-    console.log(`Request headers:`, JSON.stringify(req.headers, null, 2))
     
     try {
       // Try to retrieve by ID first
       event = await eventService.retrieve(id)
-      console.log(`Retrieved by ID: ${id}`)
     } catch (error) {
       if (error.type === "not_found") {
         // If not found by ID, try to retrieve by slug
         try {
           event = await eventService.retrieveBySlug(id)
-          console.log(`Retrieved by slug: ${id}`)
         } catch (slugError) {
           return res.status(404).json({
             message: "BBQ event not found"
@@ -44,8 +39,6 @@ export const GET = async (
       }
     }
 
-    console.log(`Raw event from DB:`, JSON.stringify(event, null, 2))
-    console.log(`Event ticket_variant_id raw:`, event.ticket_variant_id)
 
     // Only return active, bookable events to store customers
     if (!event.is_active || event.status !== "active") {
@@ -95,8 +88,6 @@ export const GET = async (
       menu_description: event.description
     }
 
-    console.log(`Final response ticket_variant_id:`, transformedEvent.ticket_variant_id)
-    console.log(`Final response object:`, JSON.stringify({ event: transformedEvent }, null, 2))
     
     res.json({ event: transformedEvent })
   } catch (error) {

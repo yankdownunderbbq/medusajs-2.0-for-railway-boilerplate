@@ -112,15 +112,11 @@ export default function CheckoutPage() {
         
         if (isCancelled) return // Exit if component unmounted
         
-        console.log('=== CART DEBUG ===')
-        console.log('Payment collection exists:', !!cartData.payment_collection)
-        console.log('Items requiring shipping:', cartData.items?.filter(item => item.requires_shipping))
         
         setCart(cartData)
         
         // 2. Handle payment sessions directly (no shipping logic needed)
         if (!cartData.payment_collection) {
-          console.log('No payment collection found, creating payment sessions')
           try {
             await sdk.store.payment.initiatePaymentSession(cartData, {
               provider_id: "pp_stripe_stripe"
@@ -129,13 +125,11 @@ export default function CheckoutPage() {
             if (isCancelled) return // Exit if component unmounted during API call
             
             const { cart: updatedCart } = await sdk.store.cart.retrieve(cartId)
-            console.log('Payment sessions created successfully')
             setCart(updatedCart)
           } catch (sessionError) {
             console.warn('Payment session creation failed:', sessionError)
           }
         } else {
-          console.log('Payment collection and sessions already exist, using existing')
         }
         
       } catch (err) {
@@ -219,9 +213,6 @@ export default function CheckoutPage() {
   // Bypasses buggy Medusa v2.0 shipping options API entirely
   const autoSelectShippingMethod = async (cartId: string) => {
     try {
-      console.log('=== CREATING PICKUP SHIPPING METHOD (FINAL SOLUTION) ===')
-      console.log('Cart ID:', cartId)
-      console.log('Using verified shipping option ID:', PICKUP_SHIPPING_OPTION_ID)
       
       // Direct API call to add pickup shipping method to cart
       const response = await fetch(`${MEDUSA_API_URL}/store/carts/${cartId}/shipping-methods`, {
@@ -255,13 +246,10 @@ export default function CheckoutPage() {
       }
       
       const result = await response.json()
-      console.log('✅ Pickup shipping method added successfully!')
-      console.log('Updated cart shipping methods:', result.cart?.shipping_methods)
       
       // Verify the shipping method was actually added
       if (result.cart?.shipping_methods?.length > 0) {
         const addedMethod = result.cart.shipping_methods[0]
-        console.log(`✅ Verified: ${addedMethod.shipping_option?.name || 'Pickup'} method added to cart`)
         return true
       } else {
         console.warn('⚠️  Shipping method API returned success but no methods found on cart')
@@ -276,16 +264,13 @@ export default function CheckoutPage() {
 
   const completeCart = async () => {
     try {
-      console.log('=== STARTING CART COMPLETION ===')
       
       // Check if cart has items that require shipping
       const hasShippingItems = cart.items?.some((item: any) => item.requires_shipping)
-      console.log('Cart has items requiring shipping:', hasShippingItems)
       
       if (hasShippingItems) {
         // Auto-select shipping method if only one exists
         const shippingSelected = await autoSelectShippingMethod(cartId)
-        console.log('Shipping method auto-selection result:', shippingSelected)
         
         if (!shippingSelected) {
           throw new Error('Unable to select shipping method. Please check shipping configuration in Medusa Admin.')
@@ -293,7 +278,6 @@ export default function CheckoutPage() {
         
         // Refresh cart to get updated shipping methods
         const { cart: updatedCart } = await sdk.store.cart.retrieve(cartId)
-        console.log('Cart shipping methods after auto-selection:', updatedCart.shipping_methods)
         
         // Verify shipping method was added
         if (!updatedCart.shipping_methods || updatedCart.shipping_methods.length === 0) {
@@ -301,21 +285,17 @@ export default function CheckoutPage() {
           
           // For pickup-only business, try to proceed anyway
           if (!hasShippingItems) {
-            console.log('Items do not require shipping, proceeding with completion')
           } else {
             throw new Error('Shipping method required but none was added to cart')
           }
         }
       } else {
-        console.log('✅ No shipping required - all items are digital/pickup only')
       }
       
       // Now complete the cart
-      console.log('Attempting cart completion...')
       const result = await sdk.store.cart.complete(cartId)
       
       if (result.type === 'order') {
-        console.log('✅ Order created successfully:', result.order.id)
         router.push(`/checkout/success?order_id=${result.order.id}`)
       } else {
         throw new Error('Cart completion failed - no order created')

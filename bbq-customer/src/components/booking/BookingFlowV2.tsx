@@ -990,7 +990,7 @@ export default function BookingFlowV2({ eventId, event, products = [] }: Booking
       if (quantity > 0 && selectedVariant) {
         const price = selectedVariant?.prices?.[0]
         const priceAmount = price?.amount || 0
-        const productTotal = quantity * (priceAmount / 100) // ✅ FIXED: Backend returns cents, convert to dollars
+        const productTotal = quantity * priceAmount // ✅ FIXED: Product API returns dollars, no conversion needed
         total += productTotal
         
         html += `
@@ -999,7 +999,7 @@ export default function BookingFlowV2({ eventId, event, products = [] }: Booking
             <div class="item-details">
               <div class="item-name">${product.title} - ${selectedVariant.title}</div>
             </div>
-            <div class="item-price">$${(priceAmount / 100).toFixed(2)}</div>
+            <div class="item-price">$${priceAmount.toFixed(2)}</div>
           </div>
         `
       }
@@ -1212,13 +1212,6 @@ export default function BookingFlowV2({ eventId, event, products = [] }: Booking
                 const price = selectedVariant?.prices?.[0]
                 const priceAmount = price?.amount || 0
                 
-                console.log('PRICE CALC:', {
-                  productTitle: product.title,
-                  selectedVariantId,
-                  selectedVariant,
-                  priceAmount,
-                  displayPrice: (priceAmount / 100).toFixed(2)
-                })
                 
                 return (
                   <div key={product.id} className="package-card" onClick={() => selectPackage()} data-package={selectedVariantId} style={{ overflow: 'hidden' }}>
@@ -1245,7 +1238,7 @@ export default function BookingFlowV2({ eventId, event, products = [] }: Booking
                         fontSize: '0.875rem',
                         fontWeight: 600
                       }}>
-                        ${(priceAmount / 100).toFixed(2)}
+                        ${priceAmount.toFixed(2)}
                       </div>
                     </div>
 
