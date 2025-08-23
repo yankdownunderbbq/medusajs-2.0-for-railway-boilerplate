@@ -1,0 +1,30 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "backend/Dockerfile"
+
+[deploy]
+startCommand = "npm start"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+
+[[services]]
+[services.backend]
+source = "."
+builder = "dockerfile"
+dockerfilePath = "backend/Dockerfile"
+
+[services.backend.build]
+buildCommand = "npm ci && npm run build"
+
+[services.backend.deploy]
+startCommand = "npm start"
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+
+[services.backend.variables]
+NODE_ENV = "production"
+NPM_CONFIG_PRODUCTION = "false"
+DISABLE_PNPM = "true"
+RAILWAY_DOCKERFILE_PATH = "backend/Dockerfile"
