@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { PaymentForm } from '@/components/booking/PaymentForm'
-import "../booking.css"
 
 interface BookingData {
   id: string
