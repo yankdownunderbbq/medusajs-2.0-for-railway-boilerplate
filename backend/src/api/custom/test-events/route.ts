@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import type EventService from "../../../modules/event/services/event"
 
 export const AUTHENTICATE = false // Skip auth for testing
 export const CORS = true
@@ -9,7 +10,7 @@ export const GET = async (
   res: MedusaResponse
 ) => {
   try {
-    const eventService = req.scope.resolve("event")
+    const eventService: EventService = req.scope.resolve("event")
     
     // Test listing events
     const events = await eventService.list({}, { take: 10 })
@@ -36,7 +37,7 @@ export const POST = async (
   res: MedusaResponse
 ) => {
   try {
-    const eventService = req.scope.resolve("event")
+    const eventService: EventService = req.scope.resolve("event")
     
     // Create a test event
     const testEvent = await eventService.create({

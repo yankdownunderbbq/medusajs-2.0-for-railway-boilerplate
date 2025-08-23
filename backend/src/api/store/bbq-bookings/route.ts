@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ulid } from "ulid"
+import type { BBQBookingRequestBody } from "../../../modules/event/types"
 
 export const AUTHENTICATE = false // Skip auth for development
 
@@ -22,7 +23,7 @@ export const POST = async (
     package_type,
     dietary_requirements,
     special_requests
-  } = req.body
+  } = req.body as BBQBookingRequestBody
 
   // Validation
   if (!bbq_event_id || !customer_name || !customer_email || !number_of_guests) {

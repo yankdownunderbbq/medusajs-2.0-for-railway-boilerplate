@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
+import type EventService from "../../../../modules/event/services/event"
 
 const EventContentSchema = z.object({
   packages: z.array(z.object({
@@ -90,7 +91,7 @@ const BookingCountSchema = z.object({
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const eventService = req.scope.resolve("event")
+    const eventService: EventService = req.scope.resolve("event")
     const { id } = req.params
     
     if (!id) {
@@ -121,7 +122,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const eventService = req.scope.resolve("event")
+    const eventService: EventService = req.scope.resolve("event")
     const { id } = req.params
     
     if (!id) {
@@ -182,7 +183,7 @@ export async function PUT(req: MedusaRequest, res: MedusaResponse) {
 
 export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const eventService = req.scope.resolve("event")
+    const eventService: EventService = req.scope.resolve("event")
     const { id } = req.params
     
     if (!id) {
@@ -221,7 +222,7 @@ export async function DELETE(req: MedusaRequest, res: MedusaResponse) {
 
 export async function PATCH(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const eventService = req.scope.resolve("event")
+    const eventService: EventService = req.scope.resolve("event")
     const { id } = req.params
     
     if (!id) {

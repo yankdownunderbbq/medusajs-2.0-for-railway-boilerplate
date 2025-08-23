@@ -1,9 +1,10 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework";
 import Stripe from 'stripe'
+import type { CreatePaymentIntentRequestBody } from "../../../../modules/event/types"
 
-// Initialize Stripe with your secret key
+// Initialize Stripe with latest API version
 const stripe = new Stripe(process.env.STRIPE_API_KEY!, {
-  apiVersion: '2023-10-16'
+  apiVersion: '2025-07-30.basil'
 })
 
 export const AUTHENTICATE = false
@@ -13,11 +14,7 @@ export async function POST(
   res: MedusaResponse
 ): Promise<void> {
   try {
-    const { amount, booking_id, customer_email } = req.body as {
-      amount?: number
-      booking_id?: string
-      customer_email?: string
-    }
+    const { amount, booking_id, customer_email } = req.body as CreatePaymentIntentRequestBody
 
     if (!amount || !booking_id) {
       res.status(400).json({

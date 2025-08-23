@@ -1,5 +1,7 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
+import type EventService from "../../../modules/event/services/event"
+import type { CreateEventData } from "../../../modules/event/types"
 
 const EventContentSchema = z.object({
   packages: z.array(z.object({
@@ -101,7 +103,7 @@ const EventQuerySchema = z.object({
 
 export async function GET(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const eventService = req.scope.resolve("event")
+    const eventService: EventService = req.scope.resolve("event")
     
     const query = EventQuerySchema.parse(req.query)
     
@@ -147,7 +149,7 @@ export async function GET(req: MedusaRequest, res: MedusaResponse) {
 
 export async function POST(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const eventService = req.scope.resolve("event")
+    const eventService: EventService = req.scope.resolve("event")
     
     const validatedData = CreateEventSchema.parse(req.body)
     
@@ -160,7 +162,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
       cancellation_deadline: validatedData.cancellation_deadline 
         ? new Date(validatedData.cancellation_deadline) 
         : undefined,
-    }
+    } as CreateEventData
     
     const event = await eventService.create(eventData)
     

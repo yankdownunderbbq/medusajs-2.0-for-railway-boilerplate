@@ -1,4 +1,5 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import type { PaymentRequestBody } from "../../../../modules/event/types"
 
 export const AUTHENTICATE = false // Skip auth for development
 
@@ -7,7 +8,7 @@ export const POST = async (
   req: MedusaRequest,
   res: MedusaResponse
 ) => {
-  const { booking_id, return_url } = req.body
+  const { booking_id, return_url } = req.body as PaymentRequestBody
 
   if (!booking_id) {
     return res.status(400).json({

@@ -1,4 +1,4 @@
-import { EventService } from "./services/event"
+import EventService from "./services/event"
 
 export const EVENT_MODULE = "event"
 

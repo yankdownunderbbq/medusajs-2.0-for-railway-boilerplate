@@ -1,5 +1,6 @@
 import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
+import type EventService from "../../../modules/event/services/event"
 
 export const AUTHENTICATE = false // Skip auth for development
 export const CORS = true // Enable CORS
@@ -17,7 +18,7 @@ export const GET = async (
   res: MedusaResponse
 ) => {
   try {
-    const eventService = req.scope.resolve("event")
+    const eventService: EventService = req.scope.resolve("event")
     
     const query = StoreEventQuerySchema.parse(req.query)
     

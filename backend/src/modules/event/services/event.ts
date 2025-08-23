@@ -1,74 +1,19 @@
-import { Event, EventContent } from "../models/event"
+import { Event } from "../models/event"
+import type { 
+  EventSelector,
+  EventContent, 
+  CreateEventData, 
+  UpdateEventData, 
+  EventListConfig 
+} from "../types"
+import type { EntityManager } from "@mikro-orm/postgresql"
 
-type EventSelector = {
-  id?: string
-  title?: string
-  bbq_region?: string
-  status?: string
-  is_active?: boolean
-  slug?: string
-  event_date?: {
-    gte?: Date
-    lte?: Date
-    gt?: Date
-    lt?: Date
-  }
-}
-
-export interface CreateEventData {
-  title: string
-  description: string
-  bbq_region: string
-  event_date: Date
-  duration_hours: number
-  location: string
-  base_price: number
-  max_capacity: number
-  status?: "draft" | "active" | "sold-out" | "cancelled" | "completed"
-  image_url?: string
-  hero_image_url?: string
-  content?: EventContent
-  registration_deadline?: Date
-  cancellation_deadline?: Date
-  venue_address?: string
-  contact_email?: string
-  contact_phone?: string
-  special_instructions?: string
-  slug?: string
-  metadata?: Record<string, any>
-}
-
-export interface UpdateEventData {
-  title?: string
-  description?: string
-  bbq_region?: string
-  event_date?: Date
-  duration_hours?: number
-  location?: string
-  base_price?: number
-  max_capacity?: number
-  status?: "draft" | "active" | "sold-out" | "cancelled" | "completed"
-  image_url?: string
-  hero_image_url?: string
-  content?: EventContent
-  registration_deadline?: Date
-  cancellation_deadline?: Date
-  is_active?: boolean
-  venue_address?: string
-  contact_email?: string
-  contact_phone?: string
-  special_instructions?: string
-  slug?: string
-  metadata?: Record<string, any>
-  current_bookings?: number
-}
-
-export class EventService {
+export default class EventService {
   private eventRepository: any
-  private manager: any
+  private manager_: EntityManager
 
-  constructor({ manager }: { manager: any }) {
-    this.manager = manager
+  constructor({ manager }: { manager: EntityManager }) {
+    this.manager_ = manager
     this.eventRepository = manager.getRepository(Event)
   }
 
@@ -97,8 +42,8 @@ export class EventService {
     }
 
     const event = this.eventRepository.create(data)
-    this.manager.persist(event)
-    await this.manager.flush()
+    this.manager_.persist(event)
+    await this.manager_.flush()
     
     return event
   }
@@ -125,7 +70,7 @@ export class EventService {
 
   async list(
     selector: EventSelector = {},
-    config: { skip?: number; take?: number; order?: any } = {}
+    config: EventListConfig = {}
   ): Promise<Event[]> {
     const where: any = {}
 
@@ -186,7 +131,7 @@ export class EventService {
 
   async listAndCount(
     selector: EventSelector = {},
-    config: { skip?: number; take?: number; order?: any } = {}
+    config: EventListConfig = {}
   ): Promise<[Event[], number]> {
     const where: any = {}
 
@@ -278,19 +223,8 @@ export class EventService {
     }
 
     // ADD DEBUGGING HERE:
-    console.log('=== EventService UPDATE DEBUG ===')
-    console.log('Before update - event.content:', JSON.stringify(event.content))
-    console.log('Data being assigned:', JSON.stringify(data))
-    
     Object.assign(event, data)
-    
-    console.log('After Object.assign - event.content:', JSON.stringify(event.content))
-    console.log('Event object after assign:', JSON.stringify({ id: event.id, content: event.content }))
-    
-    await this.manager.flush()
-    
-    console.log('After flush - event.content:', JSON.stringify(event.content))
-    console.log('=== END DEBUG ===')
+    await this.manager_.flush()
 
     return event
   }
@@ -303,15 +237,15 @@ export class EventService {
       throw new Error("Cannot delete event with existing bookings")
     }
 
-    this.manager.remove(event)
-    await this.manager.flush()
+    this.manager_.remove(event)
+    await this.manager_.flush()
   }
 
   async incrementBookingCount(eventId: string, increment: number = 1): Promise<Event> {
     const event = await this.retrieve(eventId)
     
     event.updateBookingCount(increment)
-    await this.manager.flush()
+    await this.manager_.flush()
 
     return event
   }

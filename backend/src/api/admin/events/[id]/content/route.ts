@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
+import type EventService from "../../../../../modules/event/services/event"
 
 const UpdateContentSchema = z.object({
   productIds: z.array(z.string()).optional(),
@@ -62,7 +63,7 @@ const UpdateContentSchema = z.object({
 
 export async function PUT(req: MedusaRequest, res: MedusaResponse) {
   try {
-    const eventService = req.scope.resolve("event")
+    const eventService: EventService = req.scope.resolve("event")
     const { id } = req.params
     
     if (!id) {
