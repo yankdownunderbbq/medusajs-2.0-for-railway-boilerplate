@@ -35,37 +35,16 @@ export default function EventPage({ params }: EventPageProps) {
   // Fetch products when event is loaded
   useEffect(() => {
     async function fetchProducts() {
-      console.log('=== PRODUCT FETCH DEBUG ===')
-      console.log('Event:', event)
-      console.log('Product IDs:', event?.content?.productIds)
-      console.log('Backend URL:', process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL)
-      console.log('API Key exists:', !!process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY)
-      
-      console.log('Event content:', event?.content)
-      console.log('Content type:', typeof event?.content)
-      console.log('Content keys:', event?.content ? Object.keys(event.content) : 'No content')
-      
-      console.log('All event properties:', event ? Object.keys(event) : 'No event')
-      console.log('Looking for productIds in:', {
-        'event.productIds': event?.productIds,
-        'event.content': event?.content,
-        'event.products': event?.products,
-        'event.product_ids': event?.product_ids
-      })
-
       if (!event || !event.content?.productIds?.length) {
-        console.log('❌ No event or product IDs found')
         setProducts([])
         return
       }
-
-      console.log('✅ Starting product fetch for IDs:', event.content.productIds)
 
       try {
         // Map over product IDs and make individual API calls
         const productPromises = event.content.productIds.map(async (productId: string) => {
           try {
-            const url = `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/products/${productId}?fields=*variants,*variants.prices`
+            const url = `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/products/${productId}?fields=thumbnail,description,variants.id,variants.title,variants.prices.amount,variants.prices.currency_code`
             
             const response = await fetch(url, {
               headers: {
@@ -82,7 +61,6 @@ export default function EventPage({ params }: EventPageProps) {
             
             return productData.product || null
           } catch (error) {
-            console.warn(`❌ Error fetching product ${productId}:`, error)
             return null
           }
         })
@@ -93,7 +71,6 @@ export default function EventPage({ params }: EventPageProps) {
         
         setProducts(validProducts)
       } catch (error) {
-        console.error('❌ Product fetch error:', error)
         setProducts([])
       }
     }
@@ -113,7 +90,6 @@ export default function EventPage({ params }: EventPageProps) {
   }
   
   if (error) {
-    console.error('Event fetch error:', error)
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -131,7 +107,6 @@ export default function EventPage({ params }: EventPageProps) {
 
   // Add defensive checks for required properties
   if (!event.event_date || !event.bbq_region || !event.title) {
-    console.error('Event missing required properties:', event)
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -146,7 +121,6 @@ export default function EventPage({ params }: EventPageProps) {
   const eventDate = new Date(event.event_date)
   const spotsLeft = (event.max_capacity || 0) - (event.current_bookings || 0)
   const isEventFull = spotsLeft <= 0 || event.status === 'sold-out'
-  const isUpcoming = eventDate > new Date()
   
   // Create a compatible event status object
   const eventStatusData = {
@@ -172,10 +146,6 @@ export default function EventPage({ params }: EventPageProps) {
       hour: '2-digit',
       minute: '2-digit'
     })
-  }
-  
-  const formatPrice = (priceInCents: number) => {
-    return (priceInCents / 100).toFixed(2)
   }
 
   return (
@@ -398,7 +368,7 @@ export default function EventPage({ params }: EventPageProps) {
               </ul>
               <div className="card-value">
                 <span className="value-label">Standalone Value:</span>
-                <span className="value-amount">A${(event.base_price / 100 + 10).toFixed(2)}</span>
+                <span className="value-amount">${(event.base_price / 100).toFixed(2)}</span>
               </div>
             </div>
 
@@ -458,7 +428,7 @@ export default function EventPage({ params }: EventPageProps) {
               <div className="summary-math">
                 <div className="math-line">
                   <span className="math-item">{event.bbq_region} BBQ Tasting</span>
-                  <span className="math-value">A${(event.base_price / 100 + 10).toFixed(2)}</span>
+                  <span className="math-value">${(event.base_price / 100).toFixed(2)}</span>
                 </div>
                 <div className="math-line">
                   <span className="math-item">Store Benefits</span>
