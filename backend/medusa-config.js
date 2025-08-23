@@ -23,8 +23,23 @@ import {
   MEILISEARCH_HOST,
   MEILISEARCH_ADMIN_KEY
 } from 'lib/constants';
+import { validateRuntimeEnvironment } from 'utils/validate-runtime-env';
 
 loadEnv(process.env.NODE_ENV, process.cwd());
+
+// Validate required environment variables at runtime (not build time)
+// This allows the build to succeed with placeholder values while ensuring
+// that real values are present when the server actually starts
+if (process.env.NODE_ENV !== 'test') {
+  try {
+    validateRuntimeEnvironment();
+  } catch (error) {
+    // Only fail during actual server startup, not during build
+    if (process.argv.some(arg => arg.includes('medusa') && (arg.includes('start') || arg.includes('develop')))) {
+      throw error;
+    }
+  }
+}
 
 const medusaConfig = {
   projectConfig: {

@@ -1,0 +1,22 @@
+# Minimal .dockerignore - only exclude what's truly unnecessary
+
+# Dependencies (will be installed fresh)
+node_modules
+
+# Build outputs (will be generated during build)
+.medusa
+
+# Git and development files
+.git
+.gitignore
+*.md
+.vscode
+.DS_Store
+
+# Log files
+npm-debug.log*
+*.log
+
+# Docker files themselves
+Dockerfile*
+.dockerignore
