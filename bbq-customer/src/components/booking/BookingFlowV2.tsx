@@ -863,6 +863,25 @@ export default function BookingFlowV2({ eventId, event, products = [] }: Booking
     }
   }, [eventId])
 
+  // Initialize selectedVariants when products load
+  useEffect(() => {
+    if (products && products.length > 0) {
+      const initialVariants: Record<string, string> = {}
+      products.forEach(product => {
+        if (product.variants && product.variants.length > 0) {
+          initialVariants[product.id] = product.variants[0].id
+          console.log(`Initialized variant for ${product.title}:`, {
+            productId: product.id,
+            variantId: product.variants[0].id,
+            variantTitle: product.variants[0].title
+          })
+        }
+      })
+      setSelectedVariants(initialVariants)
+      console.log('Initialized selectedVariants:', initialVariants)
+    }
+  }, [products])
+
   const changeQuantity = (delta: number) => {
     const newQuantity = ticketQuantity + delta
     const availableSpots = event.max_capacity - event.current_bookings
@@ -879,8 +898,17 @@ export default function BookingFlowV2({ eventId, event, products = [] }: Booking
   }
 
   const changePackageQuantity = (packageType: string, delta: number) => {
+    console.log('changePackageQuantity called:', {
+      packageType,
+      delta,
+      currentQuantity: selectedPackages[packageType] || 0,
+      selectedPackages: selectedPackages,
+      selectedVariants: selectedVariants
+    })
+    
     const newQuantity = (selectedPackages[packageType] || 0) + delta
     if (newQuantity >= 0 && newQuantity <= 5) {
+      console.log('Setting new quantity:', newQuantity, 'for packageType:', packageType)
       setSelectedPackages(prev => ({
         ...prev,
         [packageType]: newQuantity
@@ -1037,7 +1065,15 @@ export default function BookingFlowV2({ eventId, event, products = [] }: Booking
       }
 
       // Create cart
+      console.log('Creating cart with data:', cartData)
+      console.log('selectedPackages details:', Object.entries(selectedPackages).map(([variantId, quantity]) => ({
+        variantId,
+        quantity,
+        productInfo: products.find(p => p.variants?.some(v => v.id === variantId))?.title
+      })))
+      
       const cartId = await createEventCart(cartData)
+      console.log('Cart created successfully with ID:', cartId)
       
       // Redirect to checkout
       redirectToCheckout(cartId)
