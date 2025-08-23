@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { PaymentForm } from '@/components/booking/PaymentForm'
 
@@ -14,7 +14,7 @@ interface BookingData {
   bbq_event_id: string
 }
 
-export default function PaymentPage() {
+function PaymentPageContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const [bookingData, setBookingData] = useState<BookingData | null>(null)
@@ -156,5 +156,28 @@ export default function PaymentPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+function PaymentPageFallback() {
+  return (
+    <div className="booking-page">
+      <div className="payment-container">
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-warm-copper mx-auto mb-4"></div>
+            <p>Loading payment page...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function PaymentPage() {
+  return (
+    <Suspense fallback={<PaymentPageFallback />}>
+      <PaymentPageContent />
+    </Suspense>
   )
 }

@@ -3,8 +3,9 @@
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { CheckCircle, Clock, MapPin, Calendar, Package, ArrowRight, Mail, Phone } from 'lucide-react'
+import { Suspense } from 'react'
 
-export default function CheckoutSuccess() {
+function CheckoutSuccessContent() {
   const searchParams = useSearchParams()
   const orderId = searchParams.get('order_id')
 
@@ -151,5 +152,26 @@ export default function CheckoutSuccess() {
         </div>
       </div>
     </div>
+  )
+}
+
+function CheckoutSuccessFallback() {
+  return (
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-2xl mx-auto">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+          <p>Loading checkout success...</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function CheckoutSuccess() {
+  return (
+    <Suspense fallback={<CheckoutSuccessFallback />}>
+      <CheckoutSuccessContent />
+    </Suspense>
   )
 }

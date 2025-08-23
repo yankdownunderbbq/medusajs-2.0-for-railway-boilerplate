@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 // Mock bookings data - in a real app this would come from a database
@@ -97,7 +97,7 @@ const mockBookings = [
   }
 ]
 
-export default function AdminBookingsPage() {
+function AdminBookingsContent() {
   const searchParams = useSearchParams()
   const eventFilter = searchParams.get('event')
   
@@ -476,5 +476,39 @@ export default function AdminBookingsPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+function AdminBookingsPageFallback() {
+  return (
+    <div className="admin-bookings">
+      <div className="admin-container">
+        <div className="admin-header">
+          <div className="admin-header-content">
+            <nav className="breadcrumb">
+              <Link href="/admin">Admin</Link>
+              <span className="separator">/</span>
+              <span>Bookings</span>
+            </nav>
+            <h1 className="admin-title">Booking Management</h1>
+            <p className="admin-subtitle">Loading booking data...</p>
+          </div>
+        </div>
+        <div className="flex items-center justify-center py-20">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-warm-copper mx-auto mb-4"></div>
+            <p>Loading bookings...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function AdminBookingsPage() {
+  return (
+    <Suspense fallback={<AdminBookingsPageFallback />}>
+      <AdminBookingsContent />
+    </Suspense>
   )
 }

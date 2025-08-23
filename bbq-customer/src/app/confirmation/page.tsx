@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
-export default function ConfirmationPage() {
+function ConfirmationContent() {
   const searchParams = useSearchParams()
   const [bookingDetails, setBookingDetails] = useState<{
     firstName: string
@@ -210,5 +210,24 @@ export default function ConfirmationPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+function ConfirmationPageFallback() {
+  return (
+    <div className="min-h-screen pt-32 px-4 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-warm-copper mx-auto mb-4"></div>
+        <p>Loading confirmation page...</p>
+      </div>
+    </div>
+  )
+}
+
+export default function ConfirmationPage() {
+  return (
+    <Suspense fallback={<ConfirmationPageFallback />}>
+      <ConfirmationContent />
+    </Suspense>
   )
 }

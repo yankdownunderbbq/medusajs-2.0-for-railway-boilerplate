@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 
@@ -12,7 +12,7 @@ interface CartItem {
   type: 'ticket' | 'package'
 }
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const searchParams = useSearchParams()
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -396,5 +396,24 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+function CheckoutPageFallback() {
+  return (
+    <div className="min-h-screen pt-32 px-4 flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-warm-copper mx-auto mb-4"></div>
+        <p>Loading checkout page...</p>
+      </div>
+    </div>
+  )
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<CheckoutPageFallback />}>
+      <CheckoutContent />
+    </Suspense>
   )
 }
