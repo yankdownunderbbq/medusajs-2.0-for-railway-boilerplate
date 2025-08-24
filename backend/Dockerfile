@@ -12,9 +12,6 @@ RUN apk add --no-cache python3 make g++ cairo-dev jpeg-dev pango-dev
 # Copy package files for dependency installation
 COPY package.json package-lock.json ./
 
-# Install dependencies using npm
-RUN npm ci --only=production && npm cache clean --force
-
 # Copy all dependencies again for build (including devDependencies)
 RUN npm ci && npm cache clean --force
 
@@ -27,7 +24,7 @@ COPY tsconfig.json ./
 COPY .env* ./
 
 # Build the Medusa application
-RUN npm run build
+RUN npm run build --no-admin
 
 # Expose port
 EXPOSE 9000
