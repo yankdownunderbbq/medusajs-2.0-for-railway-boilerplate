@@ -6,13 +6,14 @@ import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-
 import { loadStripe } from '@stripe/stripe-js'
 import { Mail, Phone, MapPin, User, AlertCircle, Lock } from 'lucide-react'
 import { sdk } from '@/lib/medusa'
+import { medusaClient } from '@/lib/medusa-client'
 import { formatSimplePrice, formatLineTotal, formatCartTotal } from '@/utils/price'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
 // Configuration constants for Medusa v2.0 API
-const MEDUSA_API_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "http://localhost:9000"
-const PUBLISHABLE_API_KEY = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY!
+const MEDUSA_API_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL || "https://admin.yankdownunderbbq.com"
+const PUBLISHABLE_API_KEY = 'pk_ef488d016ea7a5acab1118f665d7e7d30830edcc160046ae93ff31291066376e'
 const PICKUP_SHIPPING_OPTION_ID = "so_01K37V2NKQE09P3T3MPM7T55BP" // Verified "Pickup Only" option
 
 // Extracted InputField component to prevent cursor jumping
@@ -215,37 +216,13 @@ export default function CheckoutPage() {
     try {
       
       // Direct API call to add pickup shipping method to cart
-      const response = await fetch(`${MEDUSA_API_URL}/store/carts/${cartId}/shipping-methods`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-publishable-api-key': PUBLISHABLE_API_KEY,
-        },
-        body: JSON.stringify({
-          option_id: PICKUP_SHIPPING_OPTION_ID,
-          data: {}
-        })
+      const response = await medusaClient.post(`/store/carts/${cartId}/shipping-methods`, {
+        option_id: PICKUP_SHIPPING_OPTION_ID,
+        data: {}
       })
       
-      if (!response.ok) {
-        const error = await response.json()
-        console.error('❌ Failed to add pickup shipping method:', error)
-        console.error('Response status:', response.status)
-        console.error('Response headers:', Object.fromEntries(response.headers.entries()))
-        
-        // Provide specific troubleshooting based on error
-        if (response.status === 401) {
-          console.error('💡 Authentication error - check publishable API key')
-        } else if (response.status === 404) {
-          console.error('💡 Shipping option not found - check shipping option ID in admin')
-        } else if (error.message?.includes('option')) {
-          console.error('💡 Invalid shipping option ID - verify in Medusa Admin')
-        }
-        
-        return false
-      }
-      
-      const result = await response.json()
+      // medusaClient.post() handles errors and returns JSON directly
+      const result = response
       
       // Verify the shipping method was actually added
       if (result.cart?.shipping_methods?.length > 0) {
