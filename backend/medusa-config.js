@@ -54,6 +54,13 @@ const medusaConfig = {
       jwtSecret: JWT_SECRET,
       cookieSecret: COOKIE_SECRET
     },
+    sessionOptions: {
+      saveUninitialized: true,  // This is the critical fix
+      resave: true,
+      rolling: false,
+      name: "medusa.sid",
+      secret: COOKIE_SECRET
+    },
     build: {
       rollupOptions: {
         external: ["@medusajs/dashboard"]
@@ -61,8 +68,8 @@ const medusaConfig = {
     }
   },
   admin: {
-    backendUrl: BACKEND_URL,
-    disable: SHOULD_DISABLE_ADMIN,
+    backendUrl: process.env.MEDUSA_BACKEND_URL || "https://medusajs-20-for-railway-boilerplate-production-874c.up.railway.app",
+    disable: false || SHOULD_DISABLE_ADMIN
   },
   modules: [
     {
