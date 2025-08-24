@@ -2,8 +2,11 @@ import type { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { z } from "zod"
 import type EventService from "../../../modules/event/services/event"
 
-export const AUTHENTICATE = false // Skip auth for development
-export const CORS = true // Enable CORS
+export const AUTHENTICATE = false
+export const CORS = {
+  origin: ["http://localhost:3000", "https://yankdownunderbbq.com", "*"],
+  credentials: false
+}
 
 const StoreEventQuerySchema = z.object({
   bbq_region: z.string().optional(),
@@ -51,6 +54,7 @@ export const GET = async (
       id: event.id,
       title: event.title,
       description: event.description,
+      menu_description: event.description, // Use description as menu_description
       event_date: event.event_date.toISOString(),
       duration_hours: event.duration_hours,
       location: event.location,
@@ -59,28 +63,12 @@ export const GET = async (
       base_price: event.base_price,
       bbq_region: event.bbq_region,
       status: event.status,
-      image_url: event.image_url,
-      hero_image_url: event.hero_image_url,
-      slug: event.slug,
-      venue_address: event.venue_address,
-      contact_email: event.contact_email,
-      contact_phone: event.contact_phone,
-      special_instructions: event.special_instructions,
-      registration_deadline: event.registration_deadline?.toISOString(),
-      cancellation_deadline: event.cancellation_deadline?.toISOString(),
-      // Include content fields that frontend expects
-      packages: event.content?.packages || [],
-      takeHomeProducts: event.content?.takeHomeProducts || [],
-      faqs: event.content?.faqs || [],
-      socialProof: event.content?.socialProof || {},
-      logistics: event.content?.logistics || {},
-      timeline: event.content?.timeline || [],
-      included_benefits: event.content?.included_benefits || [],
-      // Helper properties
-      spots_left: event.getSpotsLeft(),
-      is_bookable: event.isBookable(),
-      is_upcoming: event.isUpcoming(),
-      formatted_price: event.getFormattedPrice()
+      packages: event.content?.packages?.map(pkg => ({
+        type: pkg.name.toLowerCase().replace(/\s+/g, '-'), // Convert name to type format
+        name: pkg.name,
+        price: pkg.price,
+        description: pkg.description
+      })) || []
     }))
     
     res.json({
