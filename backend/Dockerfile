@@ -24,7 +24,7 @@ COPY tsconfig.json ./
 COPY .env* ./
 
 # Build the Medusa application
-RUN npm run build --no-admin
+RUN npm run build
 
 # Expose port
 EXPOSE 9000
