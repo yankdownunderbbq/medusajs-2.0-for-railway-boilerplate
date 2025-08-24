@@ -191,3 +191,4 @@ const medusaConfig = {
 console.log(JSON.stringify(medusaConfig, null, 2));
 export default defineConfig(medusaConfig);
 // Force admin rebuild Sun Aug 24 19:31:37 EDT 2025
+// Force restart Sun Aug 24 19:45:04 EDT 2025
