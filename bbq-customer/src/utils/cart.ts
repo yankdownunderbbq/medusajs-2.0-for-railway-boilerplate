@@ -1,3 +1,5 @@
+import { medusaFetch } from '@/lib/medusa-client'
+
 interface CreateCartData {
   eventTicketVariantId: string
   ticketQuantity: number
@@ -9,20 +11,16 @@ interface CreateCartData {
 export async function createEventCart(data: CreateCartData): Promise<string> {
   try {
     // Create cart
-    const cartResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/carts`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || 'pk_ef488d016ea7a5acab1118f665d7e7d30830edcc160046ae93ff31291066376e'
-        },
-        body: JSON.stringify({
-          region_id: data.regionId,
-          email: data.customerEmail
-        })
-      }
-    )
+    const cartResponse = await medusaFetch('/store/carts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        region_id: data.regionId,
+        email: data.customerEmail
+      })
+    })
 
     if (!cartResponse.ok) {
       throw new Error('Failed to create cart')
@@ -32,38 +30,30 @@ export async function createEventCart(data: CreateCartData): Promise<string> {
     const cartId = cartData.cart.id
 
     // Add event ticket to cart
-    await fetch(
-      `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/carts/${cartId}/line-items`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || 'pk_ef488d016ea7a5acab1118f665d7e7d30830edcc160046ae93ff31291066376e'
-        },
-        body: JSON.stringify({
-          variant_id: data.eventTicketVariantId,
-          quantity: data.ticketQuantity
-        })
-      }
-    )
+    await medusaFetch(`/store/carts/${cartId}/line-items`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        variant_id: data.eventTicketVariantId,
+        quantity: data.ticketQuantity
+      })
+    })
 
     // Add BBQ packages to cart
     for (const [variantId, quantity] of Object.entries(data.selectedPackages)) {
       if (quantity > 0) {
-        await fetch(
-          `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/carts/${cartId}/line-items`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || 'pk_ef488d016ea7a5acab1118f665d7e7d30830edcc160046ae93ff31291066376e'
-            },
-            body: JSON.stringify({
-              variant_id: variantId,
-              quantity: quantity
-            })
-          }
-        )
+        await medusaFetch(`/store/carts/${cartId}/line-items`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            variant_id: variantId,
+            quantity: quantity
+          })
+        })
       }
     }
 
@@ -80,14 +70,7 @@ export function redirectToCheckout(cartId: string): void {
 
 export async function getDefaultRegion(): Promise<string> {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/regions`,
-      {
-        headers: {
-          'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || 'pk_ef488d016ea7a5acab1118f665d7e7d30830edcc160046ae93ff31291066376e'
-        }
-      }
-    )
+    const response = await medusaFetch('/store/regions')
 
     if (!response.ok) {
       throw new Error('Failed to fetch regions')

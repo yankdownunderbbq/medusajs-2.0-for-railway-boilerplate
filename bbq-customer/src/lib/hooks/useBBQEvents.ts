@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { medusaFetch } from '@/lib/medusa-client'
 
 export interface BBQEvent {
   id: string
@@ -34,11 +35,7 @@ export function useBBQEvents() {
   useEffect(() => {
     async function fetchEvents() {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/bbq-events`, {
-          headers: {
-            'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || 'pk_ef488d016ea7a5acab1118f665d7e7d30830edcc160046ae93ff31291066376e'
-          }
-        })
+        const response = await medusaFetch('/store/bbq-events')
 
         if (!response.ok) {
           throw new Error(`Failed to fetch events: ${response.statusText}`)
@@ -69,11 +66,7 @@ export function useBBQEvent(eventId: string) {
 
     async function fetchEvent() {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/bbq-events/${eventId}`, {
-          headers: {
-            'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || 'pk_ef488d016ea7a5acab1118f665d7e7d30830edcc160046ae93ff31291066376e'
-          }
-        })
+        const response = await medusaFetch(`/store/bbq-events/${eventId}`)
 
         if (!response.ok) {
           throw new Error(`Failed to fetch event: ${response.statusText}`)

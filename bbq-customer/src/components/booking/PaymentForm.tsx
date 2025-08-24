@@ -8,6 +8,7 @@ import {
   useStripe,
   useElements
 } from '@stripe/react-stripe-js'
+import { medusaFetch } from '@/lib/medusa-client'
 
 // Load Stripe
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
@@ -34,11 +35,10 @@ function StripePaymentForm({ bookingId, amount, onPaymentSuccess, onPaymentError
     // Create payment intent when component mounts
     const createPaymentIntent = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/stripe/payment-intent`, {
+        const response = await medusaFetch('/store/stripe/payment-intent', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || 'pk_ef488d016ea7a5acab1118f665d7e7d30830edcc160046ae93ff31291066376e'
           },
           body: JSON.stringify({
             amount: amount,

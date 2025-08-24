@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react'
 import { useBBQEvent } from '@/lib/hooks/useBBQEvents'
 import { getEventStatus } from '@/lib/events'
 import BookingFlowV2 from '@/components/booking/BookingFlowV2'
+import { medusaFetch } from '@/lib/medusa-client'
 import '../../event-page.css'
 
 interface EventPageProps {
@@ -44,13 +45,7 @@ export default function EventPage({ params }: EventPageProps) {
         // Map over product IDs and make individual API calls
         const productPromises = event.content.productIds.map(async (productId: string) => {
           try {
-            const url = `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/products/${productId}?fields=thumbnail,description,variants.id,variants.title,variants.prices.amount,variants.prices.currency_code`
-            
-            const response = await fetch(url, {
-              headers: {
-                'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || ''
-              }
-            })
+            const response = await medusaFetch(`/store/products/${productId}?fields=thumbnail,description,variants.id,variants.title,variants.prices.amount,variants.prices.currency_code`)
             
             
             if (!response.ok) {

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { medusaFetch } from '@/lib/medusa-client'
 
 export async function GET(
   request: NextRequest,
@@ -14,16 +15,8 @@ export async function GET(
   }
 
   try {
-    const backendUrl = `${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/bbq-events/${eventId}`
-    
-    // Connect to Medusa backend using the same pattern as useBBQEvents
-    const response = await fetch(backendUrl, {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || ''
-        }
-      }
-    )
+    // Connect to Medusa backend using centralized client
+    const response = await medusaFetch(`/store/bbq-events/${eventId}`)
     
 
     if (!response.ok) {

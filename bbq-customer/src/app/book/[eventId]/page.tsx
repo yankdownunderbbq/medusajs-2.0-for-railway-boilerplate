@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useBBQEvent } from '@/lib/hooks/useBBQEvents'
 import { BookingForm, BookingFormData } from '@/components/booking/BookingForm'
+import { medusaFetch } from '@/lib/medusa-client'
 import "../../booking.css"
 
 interface BookingPageProps {
@@ -24,11 +25,10 @@ export default function BookingPage({ params }: BookingPageProps) {
     setBookingError(null)
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL}/store/bbq-bookings`, {
+      const response = await medusaFetch('/store/bbq-bookings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-publishable-api-key': process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY || 'pk_ef488d016ea7a5acab1118f665d7e7d30830edcc160046ae93ff31291066376e'
         },
         body: JSON.stringify(bookingData)
       })
