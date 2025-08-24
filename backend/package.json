@@ -13,7 +13,7 @@
     "medusa"
   ],
   "scripts": {
-    "build": "medusa build --no-admin",
+    "build": "medusa build",
     "build:validate": "medusa build && node src/scripts/postBuild.js",
     "ib": "init-backend",
     "start": "init-backend && cd .medusa/server && medusa start --verbose",
