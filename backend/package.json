@@ -13,7 +13,8 @@
     "medusa"
   ],
   "scripts": {
-    "build": "medusa build && node src/scripts/postBuild.js",
+    "build": "SKIP_ENV_VALIDATION=true medusa build && node src/scripts/postBuild.js",
+    "build:validate": "medusa build && node src/scripts/postBuild.js",
     "seed": "medusa exec ./src/scripts/seed.ts",
     "ib": "init-backend",
     "start": "init-backend && cd .medusa/server && medusa start --verbose",

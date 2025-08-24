@@ -5,6 +5,12 @@
  */
 
 export function validateRuntimeEnvironment() {
+  // Skip validation during build phase
+  if (process.env.SKIP_ENV_VALIDATION === 'true') {
+    console.log('Skipping environment validation (build mode)');
+    return;
+  }
+
   const requiredEnvVars = [
     { key: 'DATABASE_URL', description: 'PostgreSQL database connection string' },
     { key: 'JWT_SECRET', description: 'JWT token signing secret' },
