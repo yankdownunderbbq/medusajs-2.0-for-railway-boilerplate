@@ -10,7 +10,7 @@ export const GET = async (
   res: MedusaResponse
 ) => {
   try {
-    const eventService: EventService = req.scope.resolve("event")
+    const eventService: EventService = req.scope.resolve("bbq_event")
     const { id } = req.params
 
     if (!id) {

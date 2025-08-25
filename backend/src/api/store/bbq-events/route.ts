@@ -21,7 +21,7 @@ export const GET = async (
   res: MedusaResponse
 ) => {
   try {
-    const eventService: EventService = req.scope.resolve("event")
+    const eventService: EventService = req.scope.resolve("bbq_event")
     
     const query = StoreEventQuerySchema.parse(req.query)
     

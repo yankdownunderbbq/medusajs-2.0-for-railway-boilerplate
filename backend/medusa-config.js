@@ -74,7 +74,7 @@ const medusaConfig = {
   modules: [
     {
       resolve: "./src/modules/event",
-      key: "event"
+      key: "bbq_event"
     },
     {
       key: Modules.FILE,
